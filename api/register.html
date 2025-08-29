@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Cypee">
+    <title>MoneyTour - Register Page</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="background">
+  <div class="container-header">
+    <div class="logo">
+      <a href="index.html"><img src="media/MoneyTour.png" alt="MoneyTour Logo"/></a>
+    </div>
+    <h1 class="header1">
+      <a href="index.html">MoneyTour</a>
+    </h1>
+  </div>
+
+  <div id="container-register">
+    <div id="title">Register</div>
+    <form>
+      <div class="input">
+        <div class="input-addon">
+          <i class="material-icons">email</i>
+        </div>
+        <input id="email" placeholder="Email" type="email" required autocomplete="off">
+      </div>
+
+      <div class="input">
+        <div class="input-addon">
+          <i class="material-icons">face</i>
+        </div>
+        <input id="username" placeholder="Username" type="text" required autocomplete="off">
+      </div>
+
+      <div class="input">
+        <div class="input-addon">
+          <i class="material-icons">vpn_key</i>
+        </div>
+        <input id="password" placeholder="Password" type="password" required autocomplete="off">
+      </div>
+
+      <div class="input">
+        <div class="input-addon">
+          <i class="material-icons">vpn_key</i>
+        </div>
+        <input id="confirm-password" placeholder="Confirm Password" type="password" required autocomplete="off">
+      </div>
+
+      <div class="remember-me">
+        <input type="checkbox" id="terms">
+        <label for="terms"><span>I accept Terms of Service</span></label>
+      </div>
+
+      <input type="submit" value="Register">
+    </form>
+
+    <div class="privacy">
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+
+    <div class="register">
+      <span>Already have an account?</span>
+      <a href="login.html"><button>Login here</button></a>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2024 MoneyTour
+  </footer>
+
+  <script src="scripts/register.js"></script>
+</body>
+</html>
