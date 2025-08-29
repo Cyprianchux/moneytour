@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Money Tour</title>
+    <meta name="description" content="Login-Register Page">
+    <meta name="author" content="Cypee">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body class="background">
+  <div class="container-header">
+    <div class="logo">
+      <a href="index.html"><img src="media/MoneyTour.png" alt="MoneyTour Logo"/></a>
+    </div>
+    <h1 class="header1">
+      <a href="index.html">MoneyTour</a>
+    </h1>
+  </div>
+
+  <div id="container-login">
+    <div id="title">Login</div>
+    <form id="login-form">
+      <div class="input">
+        <div class="input-addon">
+          <i class="material-icons">face</i>
+        </div>
+        <input id="username" placeholder="Username" type="text" required autocomplete="off">
+      </div>
+
+      <div class="input">
+        <div class="input-addon">
+          <i class="material-icons">vpn_key</i>
+        </div>
+        <input id="password" placeholder="Password" type="password" required autocomplete="off">
+      </div>
+
+      <div class="remember-me">
+        <input type="checkbox" id="remember-me">
+        <label for="remember-me"><span>Remember Me</span></label>
+      </div>
+          
+      <input type="submit" value="Log In">
+    </form>
+    <div class="forgot-password">
+        <a href="#">Forgot your password?</a>
+    </div>
+
+      <div class="register">
+          <span>Don't have an account yet?</span>
+          <a href="./register.html"><button id="register-link">Register here</button></a>
+      </div>
+  </div>
+
+  <footer>
+    &copy; 2024 MoneyTour
+  </footer>
+
+  <script src="scripts/login.js"></script> 
+</body>
+</html>
