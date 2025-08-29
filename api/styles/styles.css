@@ -9,14 +9,6 @@ body {
   padding: 0;
 }
 
-.background {
-  height: auto;
-  background-image: url('media/MoneyTour.png');
-  background-size: cover; 
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
 .header1 a {
   text-decoration: none;
   color: whitesmoke;
