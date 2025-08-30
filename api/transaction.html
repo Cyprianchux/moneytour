@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MoneyTour | Transaction History</title>
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/transaction.css"/>
+  </head>
+  <body class="background">
+    <div class="container-header">
+      <div class="logo">
+        <img src="media/MoneyTour.png" alt="MoneyTour Logo"/>
+      </div>
+      <div class="transbalance">
+        <p>Balance</p>
+        <span id="balance">$0.00</span>
+      </div>
+      <div class="top-nav">
+        <button type="button" onclick="window.location.href='dashboard.html'">Add Transaction</button>
+        <button type="button" onclick="window.location.href='index.html'">Logout</button>
+      </div>
+    </div>
+
+    <div class="container-transaction">
+      <h3 class="t-hist">TRANSACTION HISTORY</h3>
+      <table id="transactionTable" border="1">
+        <thead>
+          <tr>
+            <th>Transaction ID</th>
+            <th>Transaction Type</th>
+            <th>Transaction Details</th>
+            <th>Amount</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="transactionTableBody">
+          <!-- Transactions will be inserted here -->
+        </tbody>
+      </table>
+    </div>
+
+    <script src="transactions.js"></script>
+    <script src="dashboard.js"></script>
+  </body>
+</html>

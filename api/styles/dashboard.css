@@ -189,97 +189,15 @@ h3 {
   top: -18px;
   right: 0;
   transition: 0.5s;
+  color: var(--main-color);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
   
 .view-transactions a:hover {
-  color: rgb(85, 8, 108);
+  color: rgb(117, 3, 110);
   scale: 1.03;
-  transition: 0.5s;
+  transition: 0.7s;
+  text-shadow: none;
 }
 
-
-/* TRANSACTIONS HISTORY SECTION */
-
-.transbalance {
-  background-color: rgba(94, 5, 97, 0.8);
-  width: 30%;
-  color: #ffffff;
-  padding: 0.1rem;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.8);
-  text-align: center; 
-  margin-top: 10px; 
-  position: absolute;
-  top: 0px;
-  padding-left: 10px;
-}
-
-.t-hist {
-  margin-top: -5px;
-}
-
-.transbalance span {
-  flex-basis: 100%;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-/* Container for the table */
-.container-transaction {
-  width: 100%;
-  max-width: 1200px;
-  background-color: rgb(236, 231, 231);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  margin-top: 5px;
-  position: relative;
-}
-
-/* Table styling */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-th, td {
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  text-align:left;
-  color: #74467d;
-}
-
-th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-  color: #723b7b;
-}
-
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-tr:hover {
-  background-color: #f1f1f1;
-  cursor: pointer;
-}
-
-/* Add some spacing to buttons or any action elements */
-.actions {
-  margin-top: 15px;
-  text-align: right;
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .container {
-      width: 50%;
-  }
-
-  th, td {
-      padding: 10px;
-  }
-}
 

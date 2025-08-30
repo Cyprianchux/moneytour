@@ -10,10 +10,26 @@ body {
 
 .background {
   height: auto;
-  background-image: url('media/MoneyTour.png');
+  background-image: url('../media/MoneyTour.png');
   background-size: cover; 
   background-position: center;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
+}
+
+.header1 a {
+  text-decoration: none;
+  color: whitesmoke;
+  position: absolute;
+  top: 20px;
+  left: 100px;
+  font-family: cursive;
+  text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.5);
+  transition: 1s ease;
+}
+
+.header1 a:hover {
+  scale: 1.1;
+  transition: 1.5s ease;
 }
 
 .container-header {
@@ -44,7 +60,7 @@ body {
 
 .top-nav {
     position: absolute;
-    top: 23px;
+    top: 31px;
     right: 10px;
 }
 
