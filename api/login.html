@@ -23,7 +23,7 @@
 
   <div id="container-login">
     <div id="title">Login</div>
-    <form id="login-form">
+    <form id="login-form" method="POST" action="/login">
       <div class="input">
         <div class="input-addon">
           <i class="material-icons">face</i>
@@ -46,12 +46,12 @@
       <input type="submit" value="Log In">
     </form>
     <div class="forgot-password">
-        <a href="#">Forgot your password?</a>
+      <a href="#">Forgot your password?</a>
     </div>
 
       <div class="register">
-          <span>Don't have an account yet?</span>
-          <a href="./register.html"><button id="register-link">Register here</button></a>
+        <span>Don't have an account yet?</span>
+        <button type="button" onclick="window.location.href='register.html'">Register here</button>
       </div>
   </div>
 
