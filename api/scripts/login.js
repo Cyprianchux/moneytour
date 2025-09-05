@@ -1,35 +1,27 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const loginForm = document.getElementById('login-form');
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  if (loginForm) {
-    loginForm.addEventListener('submit', async function (e) {
-      e.preventDefault();
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const rememberMe = document.getElementById("remember-me").checked;
 
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-
-      // Make a POST request to the backend to authenticate the user
-      try {
-        const response = await fetch('http://localhost:3000/api/login', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username, password }),
-        });
-
-        const result = await response.json();
-        
-        if (response.ok) {
-          alert("Login successful!");
-          window.location.href = 'dashboard.html'; 
-        } else {
-          alert(result.message || "Login failed.");
-        }
-      } catch (error) {
-        alert("An error occurred while logging in.");
-        console.error(error);
-      }
+  try {
+    const res = await fetch("/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password, rememberMe })
     });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Login successful! Redirecting...");
+      window.location.href = "dashboard.html";
+    } else {
+      alert("Error: " + data.error);
+    }
+  } catch (err) {
+    console.error("❌ Login request failed:", err);
+    alert("Server error, try again later");
   }
 });
