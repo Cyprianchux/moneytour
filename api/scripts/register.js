@@ -18,7 +18,7 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
   }
 
   try {
-    const res = await fetch('http://localhost:5500/api/register', {
+    const res = await fetch("http://localhost:5500/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, username, password })
@@ -27,10 +27,10 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
     const data = await res.json();
 
     if (data.success) {
-      alert("Registration successful! Redirecting to login...");
+      alert("✅ Registration successful! Redirecting to login...");
       window.location.href = "login.html";
     } else {
-      alert("Error: " + data.error);
+      alert("❌ Error: " + data.error);
     }
   } catch (err) {
     console.error("❌ Register request failed:", err);
