@@ -46,12 +46,12 @@ app.post("/api/register", (req, res) => {
 
     db.query(checkUserQuery, [email, username], (err, result) => {
       if (err) {
-        return res.status(500).json({ success: false, message: 'Server error' });
+        return res.status(500).json({ success: false, error: 'Server error' });
       }
 
       if (result.length > 0) {
         // If user already exists
-        return res.status(400).json({ success: false, message: 'User with this email or username already exists' });
+        return res.status(400).json({ success: false, error: 'User with this email or username already exists' });
       }
 
       // Hash the password
@@ -61,7 +61,7 @@ app.post("/api/register", (req, res) => {
       const insertUserQuery = 'INSERT INTO users (email, username, password) VALUES (?, ?, ?)';
       db.query(insertUserQuery, [email, username, hashedPassword], (err, result) => {
         if (err) {
-          return res.status(500).json({ success: false, message: 'Database error' });
+          return res.status(500).json({ success: false, error: 'Database error' });
         }
 
         res.json({ success: true, message: 'User registered successfully' });
