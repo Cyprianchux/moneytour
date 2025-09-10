@@ -84,22 +84,26 @@ app.post("/api/login", (req, res) => {
   try {
     const sql = 'SELECT * FROM users WHERE username = ?';
     db.query(sql, [username], (err, result) => {
-      if (err) throw err;
+      if (err) {
+        return res.status(500).json({ success: false, error: "Database error" });
+      }
 
       if (result.length === 0) {
-        return res.status(400).json({ message: 'Invalid username or password.' });
+        return res.status(400).json({ suceess: false, error: 'Invalid username or password.' });
       }
 
       const user = result[0];
 
       // Compare hashed passwords
       bcrypt.compare(password, user.password, (err, isMatch) => {
-        if (err) throw err;
+        if (err) {
+          return res.status(500).json({ success: false, error: "Server error during password hashing" });
+        }
 
         if (isMatch) {
-          res.json({ message: 'Login successful!' });
+          res.json({ success: true, message: 'Login successful!' });
         } else {
-          res.status(400).json({ message: 'Invalid username or password.' });
+          res.status(400).json({ success: false, error: 'Invalid username or password.' });
         }
       });
     });

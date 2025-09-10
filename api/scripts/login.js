@@ -6,7 +6,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
   const rememberMe = document.getElementById("remember-me").checked;
 
   try {
-    const res = await fetch("/login", {
+    const res = await fetch("http://localhost:5500/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password, rememberMe })
@@ -15,10 +15,10 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     const data = await res.json();
 
     if (data.success) {
-      alert("Login successful! Redirecting...");
+      alert("✅ Login successful! Redirecting to your dasboard...");
       window.location.href = "dashboard.html";
     } else {
-      alert("Error: " + data.error);
+      alert("❌ Error: " + data.error);
     }
   } catch (err) {
     console.error("❌ Login request failed:", err);
