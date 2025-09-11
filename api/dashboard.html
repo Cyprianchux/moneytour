@@ -17,7 +17,7 @@
       <a href="index.html">MoneyTour</a>
     </h1>
     <div class="top-nav">
-      <button type="button" onclick="window.location.href='transaction.html'">View Transactions</button>
+      <button type="button" onclick="window.location.href='transHistory.html'">View Transactions</button>
     </div>
   </div>
  
@@ -37,8 +37,8 @@
     <section>
       <form id="transactionForm">
         <div>
-          <label for="type">
-            <input type="checkbox" name="type" id="type" />
+          <label for="transType">
+            <input type="checkbox" name="transType" id="transType" />
             <div class="option">
               <span>Expense</span>
               <span>Income</span>
@@ -47,7 +47,7 @@
         </div>
         
         <div>
-          <label for="name">Detail of transaction</label>
+          <label for="particulars">Detail of transaction</label>
           <input type="text" name="particulars" required />
         </div>
 
