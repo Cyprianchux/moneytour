@@ -101,7 +101,7 @@ app.post("/api/login", (req, res) => {
         }
 
         if (isMatch) {
-          res.json({ success: true, message: 'Login successful!' });
+          res.json({ success: true, message: 'Login successful!', userId: user.userId });
         } else {
           res.status(400).json({ success: false, error: 'Invalid username or password.' });
         }
@@ -111,6 +111,66 @@ app.post("/api/login", (req, res) => {
     console.error("❌ Login error:", err);
     res.status(500).json({ success: false, error: "Server error" });
   }
+});
+
+// 3. Add a Transaction
+app.post('/api/transHistory', (req, res) => {
+  console.log("Transaction request body:", req.body);
+
+  const { userId, type, particulars, amount, date, } = req.body; // Expect userId to be sent in request body
+
+  if (!userId || !type || !particulars || !amount || !date) {
+    return res.status(400).json({ message: 'Please provide all fields.' });
+  }
+
+  const sql = `INSERT INTO transactions (userId, type, particulars, amount, date) VALUES (?, ?, ?, ?, ?)`;
+  db.query(sql, [ userId, type, particulars, amount, date ], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.json({ success: false, error: 'Transaction not added' })
+    } else {
+      res.json({ success: true, message: 'Transaction added successfully!', transactionId: result.insertId });
+    }
+  });
+});
+
+
+// 4. Get All Transactions
+app.get('/api/transactions/:userId', (req, res) => {
+  const { userId } = req.params;
+
+  const sql = 'SELECT * FROM transactions WHERE userId = ? ORDER BY date DESC'; 
+
+  db.query(sql, [userId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to retrieve transactions' });
+    }
+    res.json(results);
+  });
+});
+
+
+// 5. Get User Balance
+app.get('/api/balance/:userId', (req, res) => {
+  const {userId} = req.params;
+
+  const sqlIncome = 'SELECT SUM(amount) as totalIncome FROM transactions WHERE userId = ? AND type = "income"';
+  const sqlExpense = 'SELECT SUM(amount) as totalExpense FROM transactions WHERE userId = ? AND type = "expense"';
+
+  db.query(sqlIncome, [userId], (err, incomeResult) => {
+    if (err) throw err;
+
+    db.query(sqlExpense, [userId], (err, expenseResult) => {
+      if (err) throw err;
+
+      const balance = (incomeResult[0].totalIncome || 0) - (expenseResult[0].totalExpense || 0);
+      res.json({
+        balance,
+        totalIncome: incomeResult[0].totalIncome || 0,
+        totalExpense: expenseResult[0].totalExpense || 0
+      });
+    });
+  });
 });
 
 // Start server
