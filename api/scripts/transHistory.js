@@ -1,10 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const userId = localStorage.getItem('myUserId');
+
+  if (userId === null) {
+    alert('Please login first!');
+    return;
+  }
+
   const transactionTable = document.getElementById('transactionTable').getElementsByTagName('tbody')[0];
 
   // Fetch and display transactions in a table
   async function fetchTransactions() {
     try {
-      const response = await fetch(`http://localhost:5500/api/transactions/${userId}`);
+      const response = await fetch(`http://localhost:5500/api/transHistory/${userId}`);
+
       if (!response.ok) throw new Error("Failed to fetch transactions");
 
       const transactions = await response.json();
@@ -12,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       transactions.forEach(transaction => {
         const row = transactionTable.insertRow();
+        
         row.insertCell(0).textContent = transaction.transactionId;
         row.insertCell(1).textContent = transaction.type;
         row.insertCell(2).textContent = transaction.particulars;
@@ -22,4 +31,5 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error("Error fetching transactions:", error);
     }
   }
+  fetchTransactions();
 });
