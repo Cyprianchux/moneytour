@@ -117,7 +117,7 @@ app.post("/api/login", (req, res) => {
 app.post('/api/transHistory', (req, res) => {
   console.log("Transaction request body:", req.body);
 
-  const { userId, type, particulars, amount, date, } = req.body; // Expect userId to be sent in request body
+  const { userId, type, particulars, amount, date, } = req.body;
 
   if (!userId || !type || !particulars || !amount || !date) {
     return res.status(400).json({ message: 'Please provide all fields.' });
@@ -134,9 +134,8 @@ app.post('/api/transHistory', (req, res) => {
   });
 });
 
-
 // 4. Get All Transactions
-app.get('/api/transactions/:userId', (req, res) => {
+app.get('/api/transHistory/:userId', (req, res) => {
   const { userId } = req.params;
 
   const sql = 'SELECT * FROM transactions WHERE userId = ? ORDER BY date DESC'; 
