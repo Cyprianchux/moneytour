@@ -178,3 +178,13 @@ footer {
   font-weight: bold;
   color: whitesmoke;
 }
+
+@media (max-width: 768px) {
+  .top-nav {
+    right: 5px;
+  }
+
+  .top-nav button {
+    margin-right: 5px;
+  }
+}
