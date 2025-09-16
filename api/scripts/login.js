@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (response.ok && result.success) {
           // ✅ Save userId in localStorage
-          console.log(localStorage.setItem('myUserId', JSON.stringify(result.userId)));
+          localStorage.setItem('myUserId', JSON.stringify(result.userId));
 
           alert('Login successful!');
           

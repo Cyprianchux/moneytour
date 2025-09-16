@@ -107,7 +107,7 @@ app.post("/api/login", (req, res) => {
         }
       });
     });
-    } catch (err) {
+  } catch (err) {
     console.error("❌ Login error:", err);
     res.status(500).json({ success: false, error: "Server error" });
   }
