@@ -2,6 +2,8 @@
 
 MoneyTour is a full-stack finance management application that allows users to register, log in, securely manage sessions with JWT, reset forgotten passwords via email, and track financial transactions.
 
+Click the <a href="https://cyprianchux.github.io/moneytour/api/">link</a> to visit the page.
+
 ## Features
 
 **User Authentication**
