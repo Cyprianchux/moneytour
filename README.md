@@ -1,21 +1,25 @@
 # MoneyTour Web Application
 
-MoneyTour is a full-stack finance management application that allows users to register, log in, securely manage sessions with JWT, reset forgotten passwords via email, and track financial transactions.
+MoneyTour is a full-stack finance management application that allows users to register, log in, reset forgotten passwords via email, add transactions (income/expenses), view their transaction history, and see their current balance - updated on every added transaction.
 
 Click the <a href="https://cyprianchux.github.io/moneytour/api/">link</a> to visit the page.
 
 ## Features
 
-**User Authentication**
+🔐 **User Authentication**
 
-- Registration with email & password (hashed with bcrypt).
-- Login with JWT-based authentication.
+- Registration with email, and password (hashed with bcrypt).
+- Login (with JWT-based authentication - implementation ongoing).
 - "Remember Me" option (extended refresh token storage).
 
-**Secure Sessions**
+**Add Transactions**  
+Log both _income_ and _expenses_ with details, amount, and date.
 
-- Access & refresh tokens for unique user sessions.
-- HTTP-only cookies for refresh tokens.
+**Transaction History**  
+View all transactions in a clean, tabular format.
+
+**Balance Tracking**  
+Automatically calculates and updates the current balance.
 
 **Password Recovery**
 
@@ -30,7 +34,7 @@ Click the <a href="https://cyprianchux.github.io/moneytour/api/">link</a> to vis
 
 - Register and login pages styled with CSS, and Material Icons.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Frontend**
 
@@ -42,15 +46,19 @@ Click the <a href="https://cyprianchux.github.io/moneytour/api/">link</a> to vis
 
 - Node.js
 - Express.js
-- JWT (JSON Web Token) for authentication (To be updated)
-- Bcrypt for password hashing
-- Nodemailer for password reset emails (To be updated)
+- Bcrypt for password hashing and authentication
 
 **Database**
 
 - MySQL
 
-## ⚙️ Installation & Setup
+**Other tools**
+
+- dotenv
+- cors
+- body-parser
+
+## Installation & Setup
 
 1. Clone the repository
 
@@ -60,8 +68,20 @@ cd moneytour/api
 ```
 
 2. Install dependencies
-   `npm install`
-3. Create .env file
+   `npm install express cors body-parser dotenv mysql2`
+
+3. Configure environment variables.
+   Create .env file in the project (api) root
+
+```
+PORT=5500
+DB_HOST=localhost
+DB_USER=use_your_mysql_username
+DB_PASSWORD=use_your_mysql_password
+DB_NAME=moneytour
+DB_PORT=3306
+```
+
 4. Set up MySQL database
 
 ```
@@ -76,30 +96,64 @@ CREATE TABLE users (
   reset_token_expires DATETIME,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE transactions (
+  transactionId INT AUTO_INCREMENT PRIMARY KEY,
+  userId INT NOT NULL,
+  type ENUM('income', 'expense') NOT NULL,
+  particulars VARCHAR(50) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  date DATE NOT NULL,
+  FOREIGN KEY (userId) REFERENCES users(userId)
+);
 ```
 
 5. Start the server
    `node app.js`
+   I use `nodemon app.js` while working to automatically restart the server. You can install nodemon to do the same.
 
-## 🔑 API Endpoints
+   The backend will start at:
+   `http://localhost:5500`
+
+## API Endpoints
 
 **Authentication**
 
-- POST /api/register → Register new user
-- POST /api/login → Login user (rememberMe optional)
-- POST /api/refresh → Refresh access token
+- POST /api/register → Register new user.
+- POST /api/login → Login user and return `userId`.
 
-GET /profile → Get user profile (protected)
+**Transactions**
+POST /api/transHistory → Add a transaction.
+GET /api/transHistory/:userId → Get all transactions for a user.
+
+**Balance**
+GET /api/balance/:userId → Get current balance.
 
 **Password Recovery**
 
-- POST /forgot-password → Send password reset email
-- POST /reset-password/:token → Reset password
+- POST /forgot-password → Send password reset email.
+- POST /reset-password/:token → Reset password.
 
 **Utility**
 
 - GET /test-db → Test DB connection
 
-## 📜 License
+**Frontend Pages**
+`index.html` - Login/Register page
+`login.html` - Login page
+`register.html` - registration page
+`dashboard.html` - Add new transaction & view balance
+`transHistory.html` - View transaction history & current balance
 
-- MIT License © 2024 MoneyTour Project
+**Future Improvements**
+Session management or JWT authentication.
+Better UI styling with modern frameworks.
+Export transactions (CSV/PDF).
+Data visualization (charts for spending trends).
+
+## License
+
+- MIT License © 2024 MoneyTour Project.
+  This project was done for my personal development. Feel free to modify it for your own needs.
+
+Click the <a href="https://cyprianchux.github.io/moneytour/api/">link</a> to visit the page.
