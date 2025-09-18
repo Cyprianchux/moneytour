@@ -1,37 +1,45 @@
 require('dotenv').config();
 const express = require('express');
-const mysql = require('mysql2');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const helmet = require("helmet");
+const db = require("./config/db");
+const router = require("./routes/auth");
+const utilityRoutes = require("./routes/utility");
+
+
+
 
 const app = express();
-
-// Middleware
 app.use(bodyParser.json());
 app.use(cors());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      connectSrc: ["'self'", "http://localhost:5500"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+    },
+  })
+);
 
-// MySQL connection
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
-});
 
-db.connect((err) => {
-  if (err) {
-    console.error("❌ MySQL connection failed:", err);
-    return;
-  }
-  console.log("✅ Connected to MySQL database");
-});
 
 // API health check
 app.get("/api", (req, res) => {
   res.send({ status: "API is running" });
 });
+app.get("/csp-test", (req, res) => {
+  res.send("CSP test route working");
+});
+
+
+// Mount routes
+app.use("/api", router);
+app.use("/api", utilityRoutes);
+
 
 // REGISTER endpoint
 app.post("/api/register", (req, res) => {
@@ -175,5 +183,5 @@ app.get('/api/balance/:userId', (req, res) => {
 // Start server
 const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
