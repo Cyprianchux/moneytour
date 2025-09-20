@@ -1,12 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
   const userId = localStorage.getItem("myUserId");
-  console.log("Logged in userId: ", userId);
+  // console.log("Logged in userId: ", userId);
+  const myUsername = localStorage.getItem('myUsername');
+  const usernameSpan = document.getElementById("username");
 
   if (userId === null) {
     alert("Please login first!");
+    window.location.href = "login.html";
     return;
   }
 
+  // Capitalize first letter of username
+  if (myUsername) {
+    const formattedUsername = myUsername.charAt(0).toUpperCase() + myUsername.slice(1);
+    document.getElementById("username").textContent = formattedUsername;
+  }
+  
   const transactionForm = document.getElementById('transactionForm');
   const transactionList = document.getElementById('transactionList');
   const balanceDisplay = document.getElementById('balance');
