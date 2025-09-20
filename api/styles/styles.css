@@ -110,8 +110,14 @@ input[type="submit"]:hover {
 }
 
 @media (max-width: 768px) {
-  #container-register {
-      padding: 20px;
+  #container-register, #container-login {
+    padding: 40px 20px;
+  }
+}
+
+@media (max-width: 450px) {
+  #container-register, #container-login {
+    max-width: 80%;
   }
 }
   
