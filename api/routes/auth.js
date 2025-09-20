@@ -6,7 +6,46 @@ const router = express.Router();
 const db = require("../config/db");
 const sendEmail = require("../utils/sendEmail");
 
-// Forgot Password - send reset email
+
+// Forgot Password - send reset 6-digit OTP to email
+router.post("/forgotPassword", (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ success: false, error: "Email required" });
+
+  db.query("SELECT * FROM users WHERE email = ?", [email], (err, results) => {
+    if (err) return res.status(500).json({ success: false, error: "DB error" });
+    if (results.length === 0) return res.json({ success: false, error: "No user found" });
+
+    const user = results[0];
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpire = new Date(Date.now() + 15 * 60 * 1000); // valid 15 min
+
+    // Save OTP + expiry in DB
+    db.query(
+      "UPDATE users SET resetToken = ?, resetTokenExpire = ? WHERE userId = ?",
+      [otp, otpExpire, user.userId],
+      async (err2) => {
+        if (err2) return res.status(500).json({ success: false, error: "DB error saving OTP" });
+
+        const message = `
+          <h2>Password Reset Code</h2>
+          <p>Your OTP code is: <b>${otp}</b></p>
+          <p>This code will expire in 15 minutes.</p>
+        `;
+
+        await sendEmail(email, "MoneyTour Password Reset Code", message);
+
+        res.json({ success: true, message: "OTP sent to your email." });
+      }
+    );
+  });
+});
+
+
+/*
+// Forgot Password - send reset token to email
 router.post("/forgotPassword", (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ success: false, error: "Email required" });
@@ -49,42 +88,33 @@ router.post("/forgotPassword", (req, res) => {
     );
   });
 });
-  /*
-  // Generate reset token
-  const token = crypto.randomBytes(20).toString("hex");
-  const expireTime = new Date(Date.now() + 15 * 60 * 1000); // 15 min expiry
+*/
 
-  const sql = "UPDATE users SET resetToken = ?, resetTokenExpire = ? WHERE email = ?";
-  db.query(sql, [token, expireTime, email], (err, result) => {
-    if (err) return res.status(500).json({ error: "Database error" });
-    if (result.affectedRows === 0) return res.status(404).json({ error: "Email not found" });
+router.post("/resetPassword", (req, res) => {
+  const { email, otp, password } = req.body;
 
-    // Email transporter
-    const transporter = nodemailer.createTransport({
-      service: "gmail", // change to your SMTP
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+  if (!otp || !password) {
+    return res.status(400).json({ success: false, error: "All fields are required" });
+  }
 
-    const resetURL = `http://localhost:5500/api/resetPassword.html?token=${token}`;
+  const sql = "SELECT * FROM users WHERE email = ? AND resetToken = ? AND resetTokenExpire > ?";
+  db.query(sql, [email, otp, Date.now()], (err, results) => {
+    if (err) return res.status(500).json({ success: false, error: "Database error" });
+    if (results.length === 0) return res.status(400).json({ success: false, error: "Invalid or expired OTP" });
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "MoneyTour Password Reset",
-      text: `Click the link to reset your password: ${resetURL}`,
-    };
+    const user = results[0];
+    const hashedPassword = bcrypt.hashSync(password, 10);
 
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) return res.status(500).json({ error: "Failed to send email" });
-      res.json({ success: true, message: "Password reset email sent" });
+    const updateSql = "UPDATE users SET password = ?, resetToken = NULL, resetTokenExpire = NULL WHERE userId = ?";
+    db.query(updateSql, [hashedPassword, user.userId], (err) => {
+      if (err) return res.status(500).json({ success: false, error: "Failed to reset password" });
+      res.json({ success: true, message: "Password reset successful!" });
     });
   });
 });
-*/
 
+
+/*
 // Reset Password
 router.post("/resetPassword/:token", (req, res) => {
   const { token } = req.params;
@@ -124,7 +154,7 @@ router.post("/resetPassword/:token", (req, res) => {
     });
   });
 });
-
+*/
 
 /*
 router.post("/resetPassword/:token", (req, res) => {
