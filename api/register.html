@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="styles/index.css">
   <link rel="stylesheet" href="styles/styles.css">
 </head>
-<body class="background">
+<body>
   <div class="container-header">
     <div class="logo">
       <a href="index.html"><img src="media/MoneyTour.png" alt="MoneyTour Logo"/></a>
@@ -20,54 +20,56 @@
     </h1>
   </div>
 
-  <div id="container-register">
-    <div id="title">Register</div>
-    <form id="register-form">
-      <div class="input">
-        <div class="input-addon">
-          <i class="material-icons">email</i>
+  <main>
+    <div id="container-register">
+      <div id="title">Register</div>
+      <form id="register-form">
+        <div class="input">
+          <div class="input-addon">
+            <i class="material-icons">email</i>
+          </div>
+          <input id="email" placeholder="Email" type="email" required autocomplete="off">
         </div>
-        <input id="email" placeholder="Email" type="email" required autocomplete="off">
-      </div>
 
-      <div class="input">
-        <div class="input-addon">
-          <i class="material-icons">face</i>
+        <div class="input">
+          <div class="input-addon">
+            <i class="material-icons">face</i>
+          </div>
+          <input id="username" placeholder="Username" type="text" required autocomplete="off">
         </div>
-        <input id="username" placeholder="Username" type="text" required autocomplete="off">
-      </div>
 
-      <div class="input">
-        <div class="input-addon">
-          <i class="material-icons">vpn_key</i>
+        <div class="input">
+          <div class="input-addon">
+            <i class="material-icons">vpn_key</i>
+          </div>
+          <input id="password" placeholder="Password" type="password" required autocomplete="off">
         </div>
-        <input id="password" placeholder="Password" type="password" required autocomplete="off">
-      </div>
 
-      <div class="input">
-        <div class="input-addon">
-          <i class="material-icons">vpn_key</i>
+        <div class="input">
+          <div class="input-addon">
+            <i class="material-icons">vpn_key</i>
+          </div>
+          <input id="confirm-password" placeholder="Confirm Password" type="password" required autocomplete="off">
         </div>
-        <input id="confirm-password" placeholder="Confirm Password" type="password" required autocomplete="off">
+
+        <div class="remember-me">
+          <input type="checkbox" id="terms">
+          <label for="terms"><span>I accept Terms of Service</span></label>
+        </div>
+
+        <input type="submit" value="Register">
+      </form>
+
+      <div class="privacy">
+        <a href="privacy.html">Privacy Policy</a>
       </div>
 
-      <div class="remember-me">
-        <input type="checkbox" id="terms">
-        <label for="terms"><span>I accept Terms of Service</span></label>
+      <div class="register">
+        <span>Already have an account?</span>
+        <button type="button" onclick="window.location.href='login.html'">Login here</button>
       </div>
-
-      <input type="submit" value="Register">
-    </form>
-
-    <div class="privacy">
-      <a href="privacy.html">Privacy Policy</a>
     </div>
-
-    <div class="register">
-      <span>Already have an account?</span>
-      <button type="button" onclick="window.location.href='login.html'">Login here</button>
-    </div>
-  </div>
+  </main>
 
   <footer>
     &copy; 2024 MoneyTour

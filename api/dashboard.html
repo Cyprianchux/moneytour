@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Money-Tour</title>
+  <title>MoneyTour | Dashboard</title>
   <link rel="icon" href="media/moneytour_fav.png" type="image/png" sizes="512x512">
+  <meta name="description" content="MoneyTour Dashboard - Manage your transactions">
   <link rel="stylesheet" href="styles/index.css">
   <link rel="stylesheet" href="styles/dashboard.css" />
 </head>
-<body class="background">
+<body>
   <div class="container-header">
     <div class="logo">
       <a href="index.html"><img src="media/MoneyTour.png" alt="MoneyTour Logo"/></a>
@@ -19,27 +20,24 @@
     </h1>
     <div class="top-nav">
       <button type="button" onclick="window.location.href='transHistory.html'">View Transactions</button>
+      <button type="button" onclick="window.location.href='index.html'">Logout</button>
     </div>
   </div>
 
-  <div>
-    <h3 class="welcome-username">Welcome, <span id="username"></span></h3>
-  </div>
+  <div class="welcome-username">Welcome, <span id="username"></span></div>
  
   <main>
-    <header> 
+    <section> 
       <div>
-        <h5>Balance</h5>
-        <span id="balance">$0.00</span>
+        <h5>Total Balance</h5>
+        <span id="balance">₦0.00</span>
       </div>
-    </header>
+    </section>
 
     <section>
       <h3>Add Transaction</h3>
       <ul id="transactionList"></ul>
-    </section>
-
-    <section>
+      
       <form id="transactionForm">
         <div>
           <label for="transType">
@@ -50,14 +48,9 @@
             </div>
           </label>
         </div>
-      <!--
-        <select name="transType" required>
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
-      -->  
+      
         <div>
-          <label for="particulars">Detail of transaction</label>
+          <label for="particulars">Transaction Details</label>
           <input type="text" name="particulars" required />
         </div>
 
@@ -77,7 +70,7 @@
           <input type="date" name="date" required />
         </div>
 
-        <button type="submit">Submit</button>       
+        <button type="submit">Submit Transaction</button>       
       </form>
     </section>
   </main>
