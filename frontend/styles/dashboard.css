@@ -1,0 +1,392 @@
+:root {
+  --purple: #530450;
+  --purple-dark: #360235;
+  --purple-soft: #f7e9f7;
+  --navy: #031130;
+  --muted: #687080;
+  --line: #e8e5eb;
+  --cream: #fbfaf9;
+  --white: #ffffff;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "DM Sans", Arial, sans-serif;
+  background-color: var(--cream);
+  color: var(--navy);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container-header {
+  background: rgba(251, 250, 249, .92);
+  border-bottom: 1px solid rgba(232, 229, 235, .7);
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo { flex-shrink: 0; }
+.logo img { height: 42px; width: 42px; border-radius: 50%; box-shadow: 0 5px 15px rgba(3, 17, 48, .15); }
+
+.header1 { 
+  margin: 0;
+  flex: 1;
+  min-width: 150px;
+}
+
+.header1 a {
+  text-decoration: none;
+  color: var(--navy);
+  font-family: Manrope, sans-serif;
+  font-size: 1.24rem;
+  font-weight: 800;
+  letter-spacing: -.04em;
+}
+
+.top-nav {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.top-nav button {
+  background: var(--purple);
+  color: var(--white);
+  border: 1px solid var(--purple);
+  border-radius: 8px;
+  padding: 11px 17px;
+  font-size: .92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+  font-family: "DM Sans", Arial, sans-serif;
+}
+
+.top-nav button:hover {
+  background: var(--purple-dark);
+  box-shadow: 0 10px 24px rgba(83, 4, 80, .2);
+  transform: translateY(-2px);
+}
+
+.welcome-username {
+  margin-top: 30px;
+  color: var(--navy);
+  font-family: Manrope, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-left: 32px;
+}
+
+.welcome-username span {
+  color: var(--purple);
+}
+
+main {
+  flex: 1;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1180px;
+  padding: 0 32px 40px;
+}
+
+main > section {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(3, 17, 48, .08);
+  transition: box-shadow .2s ease;
+}
+
+main > section:hover {
+  box-shadow: 0 15px 35px rgba(3, 17, 48, .08);
+}
+
+main > section:first-child {
+  background: var(--purple);
+  color: var(--white);
+  margin-bottom: 32px;
+}
+
+main > section:first-child h5 {
+  color: rgba(255, 255, 255, .7);
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+main > section:first-child span {
+  font-size: 2.5rem;
+  font-family: Manrope, sans-serif;
+  font-weight: 800;
+  color: var(--white);
+}
+
+main > section h3 {
+  font-family: Manrope, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 24px;
+  margin-top: 0;
+}
+
+#transactionList {
+  list-style: none;
+  margin: 0 0 24px;
+}
+
+#transactionList li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--cream);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: .9rem;
+}
+
+#transactionList li b {
+  color: var(--navy);
+}
+
+#transactionList li small {
+  color: var(--muted);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+form label {
+  font-size: .85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--navy);
+}
+
+form input:not(#transType),
+form select,
+form button {
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: .95rem;
+  font-family: "DM Sans", Arial, sans-serif;
+  transition: border-color .2s ease, box-shadow .2s ease;
+  background: var(--white);
+  color: var(--navy);
+}
+
+form input:focus,
+form select:focus {
+  outline: none;
+  border: 2px solid var(--purple);
+  box-shadow: 0 0 0 3px rgba(83, 4, 80, .1);
+}
+
+form button {
+  background: var(--purple);
+  color: var(--white);
+  border: 1px solid var(--purple);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+  margin-top: 8px;
+}
+
+form button:hover {
+  background: var(--purple-dark);
+  box-shadow: 0 10px 24px rgba(83, 4, 80, .2);
+  transform: translateY(-2px);
+}
+
+input#transType {
+  appearance: none;
+  display: none;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  height: 48px;
+  font-weight: 600;
+}
+
+.option span {
+  width: 50%;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1;
+  position: relative;
+  color: var(--muted);
+  transition: color .2s ease;
+}
+
+.option::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--purple);
+  height: 100%;
+  width: 50%;
+  border-radius: 6px;
+  transition: all 200ms ease;
+  z-index: 0;
+}
+
+input#transType:checked ~ .option::before {
+  left: 50%;
+}
+
+input#transType:checked ~ .option span:nth-child(2),
+.option span:nth-child(1) {
+  color: var(--navy);
+}
+
+input#transType ~ .option span:nth-child(2) {
+  color: var(--navy);
+}
+
+input#transType:checked ~ .option span:nth-child(1) {
+  color: var(--muted);
+}
+
+footer {
+  background: var(--navy);
+  color: var(--white);
+  text-align: center;
+  padding: 24px 32px;
+  margin-top: auto;
+  border-top: 1px solid var(--line);
+  font-size: .9rem;
+}
+
+footer {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .container-header {
+    padding: 16px 20px;
+    gap: 12px;
+  }
+
+  .logo {
+    flex: 0 0 auto;
+  }
+
+  .header1 {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .top-nav {
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  main {
+    padding: 0 20px 32px;
+  }
+
+  main > section {
+    padding: 24px;
+  }
+
+  form {
+    gap: 12px;
+  }
+
+  .welcome-username {
+    margin-left: 20px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container-header {
+    flex-direction: column;
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  .top-nav {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .top-nav button {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px 12px;
+    font-size: .8rem;
+  }
+
+  main {
+    padding: 0 16px 24px;
+  }
+
+  main > section {
+    padding: 20px 16px;
+  }
+
+  main > section h3 {
+    font-size: 1.15rem;
+    margin-bottom: 16px;
+  }
+
+  main > section:first-child span {
+    font-size: 1.8rem;
+  }
+
+  .welcome-username {
+    margin-left: 16px;
+    font-size: 1.05rem;
+  }
+
+  form input[type="date"],
+  form input[type="number"],
+  form input[type="text"],
+  form button {
+    font-size: .9rem;
+    padding: 10px 12px;
+  }
+}
+
+
