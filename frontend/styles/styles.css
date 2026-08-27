@@ -171,6 +171,18 @@ main {
   color: var(--muted);
 }
 
+.terms-link {
+  color: var(--purple);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color .2s ease;
+}
+
+.terms-link:hover {
+  color: var(--purple-dark);
+}
+
 .privacy, .register, .forgot-password {
   text-align: center;
   margin-top: 20px;

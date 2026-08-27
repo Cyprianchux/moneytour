@@ -11,33 +11,77 @@
   <link rel="stylesheet" href="styles/dashboard.css" />
 </head>
 <body>
-  <div class="container-header">
-    <div class="logo">
-      <a href="index.html"><img src="media/MoneyTour.png" alt="MoneyTour Logo"/></a>
+  <header class="site-header">
+    <div class="nav-wrap dashboard-nav">
+      <a class="brand" href="index.html">
+        <img src="media/MoneyTour.png" alt="" />
+        <span>Money<span>Tour</span></span>
+      </a>
+      <nav class="top-nav dashboard-top-nav">
+        <button type="button" onclick="window.location.href='transHistory.html'">View Transactions</button>
+        <button type="button" onclick="window.location.href='index.html'">Logout</button>
+      </nav>
     </div>
-    <h1 class="header1">
-      <a href="index.html">MoneyTour</a>
-    </h1>
-    <div class="top-nav">
-      <button type="button" onclick="window.location.href='transHistory.html'">View Transactions</button>
-      <button type="button" onclick="window.location.href='index.html'">Logout</button>
-    </div>
-  </div>
+  </header>
 
   <div class="welcome-username">Welcome, <span id="username"></span></div>
- 
-  <main>
-    <section> 
-      <div>
-        <h5>Total Balance</h5>
-        <span id="balance">₦0.00</span>
-      </div>
-    </section>
 
-    <section>
+  <main class="dashboard-main">
+    <div class="dashboard-hero">
+      <aside class="howto-card">
+        <span class="howto-badge">How it works</span>
+        <h2>Your dashboard at a glance</h2>
+        <p>
+          Track your money in three simple steps. Add income and expenses below,
+          watch your running total update in the overview, and review your recent
+          activity to stay in control.
+        </p>
+        <ul>
+          <li><span>1</span> Pick Income or Expense</li>
+          <li><span>2</span> Enter details, amount and date</li>
+          <li><span>3</span> Submit to refresh your balance</li>
+        </ul>
+      </aside>
+
+      <div class="dashboard-card">
+        <div class="dashboard-top">
+          <div>
+            <span class="small-label" id="greeting">Good morning</span>
+            <h2>Your overview</h2>
+          </div>
+          <span class="profile-mark" id="profileMark">MT</span>
+        </div>
+        <div class="balance-card">
+          <span>Total balance</span>
+          <strong id="balance">₦0.00</strong>
+          <div class="balance-line">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+        <div class="mini-grid">
+          <div>
+            <span class="mini-icon income">↗</span><small>Income</small
+            ><strong id="income">₦0.00</strong>
+          </div>
+          <div>
+            <span class="mini-icon expense">↘</span><small>Expenses</small
+            ><strong id="expense">₦0.00</strong>
+          </div>
+        </div>
+        <div class="activity">
+          <div class="activity-heading">
+            <strong>Recent activity</strong
+            ><a href="transHistory.html">View all</a>
+          </div>
+          <div id="activityList"></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="form-section">
       <h3>Add Transaction</h3>
       <ul id="transactionList"></ul>
-      
+
       <form id="transactionForm">
         <div>
           <label for="transType">
@@ -48,7 +92,7 @@
             </div>
           </label>
         </div>
-      
+
         <div>
           <label for="particulars">Transaction Details</label>
           <input type="text" name="particulars" required />
@@ -70,7 +114,7 @@
           <input type="date" name="date" required />
         </div>
 
-        <button type="submit">Submit Transaction</button>       
+        <button type="submit">Submit Transaction</button>
       </form>
     </section>
   </main>
@@ -79,6 +123,6 @@
     &copy; 2024 MoneyTour
   </footer>
 
-  <script src="scripts/dashboard.js"></script> 
+  <script src="scripts/dashboard.js"></script>
 </body>
 </html>

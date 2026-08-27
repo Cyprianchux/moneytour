@@ -8,21 +8,21 @@
     <link rel="icon" href="media/moneytour_fav.png" type="image/png" sizes="512x512">
     <meta name="description" content="MoneyTour Privacy Policy">
     <link rel="stylesheet" href="styles/index.css">
-    <link rel="stylesheet" href="styles/privacy.css"/> 
+    <link rel="stylesheet" href="styles/privacy.css"/>
   </head>
   <body>
-    <div class="container-header">
-      <div class="logo">
-        <a href="index.html"><img src="media/MoneyTour.png" alt="MoneyTour Logo"/></a>
+    <header class="site-header">
+      <div class="nav-wrap">
+        <a class="brand" href="index.html">
+          <img src="media/MoneyTour.png" alt="" />
+          <span>Money<span>Tour</span></span>
+        </a>
+        <nav class="top-nav">
+          <a href="login.html">Log in</a>
+          <a class="button button-small" href="register.html">Get started</a>
+        </nav>
       </div>
-      <h1 class="header1">
-        <a href="index.html">MoneyTour</a>
-      </h1>
-      <div class="top-nav">
-        <button type="button" onclick="window.location.href='login.html'">Login</button>
-        <button type="button" onclick="window.location.href='register.html'">Register</button>
-      </div>
-    </div>
+    </header>
 
     <main>
       <div id="title">
@@ -90,6 +90,13 @@
       </div>
     </main>
 
-    <footer>&copy; 2024 MoneyTour</footer>
+    <footer>
+      <p>&copy; 2024 MoneyTour. All rights reserved.</p>
+      <p class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <span aria-hidden="true">&middot;</span>
+        <a href="terms.html">Terms of Service</a>
+      </p>
+    </footer>
   </body>
 </html>
