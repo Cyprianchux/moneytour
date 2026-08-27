@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require("helmet");
+const path = require("path");
 const db = require("./config/db");
 const router = require("./routes/auth");
 const utilityRoutes = require("./routes/utility");
@@ -25,7 +26,14 @@ app.use(
   })
 );
 
+// Serve static files from frontend folder
+const frontendPath = path.join(__dirname, '../frontend');
+app.use(express.static(frontendPath));
 
+// Serve index.html for root path
+app.get('/', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
 
 // API health check
 app.get("/api", (req, res) => {
