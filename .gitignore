@@ -1,5 +1,10 @@
 .env
 
 api/node_modules
+api/test-results
+api/playwright-report
 
 JUSTME.md
+CHANGELOG.md
+STRUCTURE.md
+QUICKSTART.md
