@@ -5,49 +5,38 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require("helmet");
 const path = require("path");
-const db = require("./config/db");
-const router = require("./routes/auth");
-const utilityRoutes = require("./routes/utility");
+const createAuthRouter = require("./routes/auth");
+const createUtilityRouter = require("./routes/utility");
 
+function createApp(database) {
+  const app = express();
+  const db = database || require("./config/db");
+  const frontendPath = path.join(__dirname, '../frontend');
 
-
-
-const app = express();
-app.use(bodyParser.json());
-app.use(cors());
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      connectSrc: ["'self'", "http://localhost:5500"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-    },
-  })
-);
-
-// Serve static files from frontend folder
-const frontendPath = path.join(__dirname, '../frontend');
-app.use(express.static(frontendPath));
-
-// Serve index.html for root path
-app.get('/', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
-});
-
-// API health check
-app.get("/api", (req, res) => {
-  res.send({ status: "API is running" });
-});
-app.get("/csp-test", (req, res) => {
-  res.send("CSP test route working");
-});
-
-
-// Mount routes
-app.use("/api", router);
-app.use("/api", utilityRoutes);
-
+  app.use(bodyParser.json());
+  app.use(cors());
+  app.use(
+    helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: ["'self'", "http://localhost:5500"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+      },
+    })
+  );
+  app.use(express.static(frontendPath));
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  });
+  app.get("/api", (req, res) => {
+    res.send({ status: "API is running" });
+  });
+  app.get("/csp-test", (req, res) => {
+    res.send("CSP test route working");
+  });
+  app.use("/api", createAuthRouter(db));
+  app.use("/api", createUtilityRouter(db));
 
 // REGISTER endpoint
 app.post("/api/register", (req, res) => {
@@ -188,8 +177,7 @@ app.get('/api/balance/:userId', (req, res) => {
   });
 });
 
-// Start server
-const PORT = process.env.PORT || 5500;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+  return app;
+}
+
+module.exports = { createApp };

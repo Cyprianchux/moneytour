@@ -2,10 +2,10 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
-const router = express.Router();
-const db = require("../config/db");
 const sendEmail = require("../utils/sendEmail");
 
+module.exports = function createAuthRouter(db, emailSender = sendEmail) {
+  const router = express.Router();
 
 // Forgot Password - send reset 6-digit OTP to email
 router.post("/forgotPassword", (req, res) => {
@@ -35,7 +35,7 @@ router.post("/forgotPassword", (req, res) => {
           <p>This code will expire in 15 minutes.</p>
         `;
 
-        await sendEmail(email, "MoneyTour Password Reset Code", message);
+        await emailSender(email, "MoneyTour Password Reset Code", message);
 
         res.json({ success: true, message: "OTP sent to your email." });
       }
@@ -183,4 +183,5 @@ router.post("/resetPassword/:token", (req, res) => {
 });
 */
 
-module.exports = router;
+  return router;
+};
