@@ -115,6 +115,18 @@ CREATE TABLE transactions (
    The backend will start at:
    `http://localhost:5500`
 
+## Testing
+
+From the `api` directory:
+
+```bash
+npm test          # unit tests
+npm run test:e2e  # Playwright browser tests
+npm run test:all  # both suites
+```
+
+The E2E suite starts an isolated API server with an in-memory database, so it does not require MySQL credentials.
+
 ## API Endpoints
 
 **Authentication**
