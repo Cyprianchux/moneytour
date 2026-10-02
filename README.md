@@ -1,171 +1,71 @@
-# MoneyTour Web Application
+# MoneyTour
 
-MoneyTour is a full-stack finance management application that allows users to register, log in, reset forgotten passwords via email, add transactions (income/expenses), view their transaction history, and see their current balance - updated on every added transaction.
+MoneyTour is a static HTML/CSS/JavaScript personal-finance frontend with an Express API.
+The frontend covers registration, login,
+password recovery, transactions (income/expenses) with income and expense tracking, transaction history, and balance summaries; updated on every added transaction.
 
-Click the <a href="https://cyprianchux.github.io/moneytour/api/">link</a> to visit the page.
+Click the <a href="https://moneytour.vercel.app" target="_blank">Production link</a> or the <a href="https://cyprianchux.github.io/moneytour/api/" target="_blank">GitHub link</a> to visit the page.
 
-## Features
+## Local development
 
-🔐 **User Authentication**
-
-- Registration with email, and password (hashed with bcrypt).
-- Login (with JWT-based authentication - implementation ongoing).
-- "Remember Me" option (extended refresh token storage).
-
-**Add Transactions**  
-Log both _income_ and _expenses_ with details, amount, and date.
-
-**Transaction History**  
-View all transactions in a clean, tabular format.
-
-**Balance Tracking**  
-Automatically calculates and updates the current balance.
-
-**Password Recovery**
-
-- Forgot password flow with email reset link.
-- Secure, time-limited reset tokens.
-
-**Database Integration**
-
-- MySQL database for storing users information and transaction details.
-
-**Responsive UI**
-
-- Register and login pages styled with CSS, and Material Icons.
-
-## Tech Stack
-
-**Frontend**
-
-- HTML5
-- CSS3
-- JavaScript
-
-**Backend**
-
-- Node.js
-- Express.js
-- Bcrypt for password hashing and authentication
-
-**Database**
-
-- MySQL
-
-**Other tools**
-
-- dotenv
-- cors
-- body-parser
-
-## Installation & Setup
-
-1. Clone the repository
-
-```
-git clone https://github.com/cyprianchux/moneytour.git
-cd moneytour/api
-```
-
-2. Install dependencies
-   `npm install express cors body-parser dotenv mysql2`
-
-3. Configure environment variables.
-   Create .env file in the project (api) root
-
-```
-PORT=5500
-DB_HOST=localhost
-DB_USER=use_your_mysql_username
-DB_PASSWORD=use_your_mysql_password
-DB_NAME=moneytour
-DB_PORT=3306
-```
-
-4. Set up MySQL database
-
-```
-CREATE DATABASE moneytour;
-USE moneytour;
-
-CREATE TABLE users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  email VARCHAR(50) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL,
-  reset_token VARCHAR(20),
-  reset_token_expires DATETIME,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE transactions (
-  transactionId INT AUTO_INCREMENT PRIMARY KEY,
-  userId INT NOT NULL,
-  type ENUM('income', 'expense') NOT NULL,
-  particulars VARCHAR(50) NOT NULL,
-  amount DECIMAL(10,2) NOT NULL,
-  date DATE NOT NULL,
-  FOREIGN KEY (userId) REFERENCES users(userId)
-);
-```
-
-5. Start the server
-   `node app.js`
-   I use `nodemon app.js` while working to automatically restart the server. You can install nodemon to do the same.
-
-   The backend will start at:
-   `http://localhost:5500`
-
-## Testing
-
-From the `api` directory:
+Install pnpm globally once, then run the frontend project's dev command:
 
 ```bash
-npm test          # unit tests
-npm run test:e2e  # Playwright browser tests
-npm run test:all  # both suites
+npm install --global pnpm
+cd moneytour-api
+pnpm install
+cd ../moneytour
+pnpm install
+pnpm dev
 ```
 
-The E2E suite starts an isolated API server with an in-memory database, so it does not require MySQL credentials.
+The frontend and API are served together at <http://localhost:5500>. The local API uses
+MySQL by default. Create a local database by running `moneytour-api/sql/mysql-workbench.sql`
+in MySQL Workbench, then configure `moneytour-api/.env`:
 
-## API Endpoints
+```dotenv
+DB_CLIENT=mysql
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your-local-password
+DB_NAME=moneytour
+DB_PORT=3306
+PORT=5500
+```
 
-**Authentication**
+Set `window.MONEYTOUR_API_URL` in `scripts/config.js` to the API origin if the deployed frontend
+and API use different domains; leave it empty for same-origin deployments.
 
-- POST /api/register → Register new user.
-- POST /api/login → Login user and return `userId`.
+## Tests
 
-**Transactions**
-POST /api/transHistory → Add a transaction.
-GET /api/transHistory/:userId → Get all transactions for a user.
+From the frontend directory:
 
-**Balance**
-GET /api/balance/:userId → Get current balance.
+```bash
+pnpm install
+pnpm test:unit
+pnpm test:e2e
+pnpm test
+```
 
-**Password Recovery**
+Unit tests use Node's built-in test runner. Playwright E2E tests start an isolated API backed
+by an in-memory test database, so test runs do not require MySQL or production credentials.
+Install Playwright's browser once with `pnpm exec playwright install chromium` if it is not
+already available.
 
-- POST /forgot-password → Send password reset email.
-- POST /reset-password/:token → Reset password.
+## Backend and production database
 
-**Utility**
+The API lives in `moneytour-api`. It supports local MySQL and PostgreSQL with the same
+routes; `DB_CLIENT=mysql` selects MySQL, while `DB_CLIENT=postgres` selects PostgreSQL.
+On Vercel, PostgreSQL is selected automatically. Configure `SUPABASE_DB_URL` (preferred,
+using a Supabase session pooler connection string) or `DATABASE_URL`, and optionally set
+`FRONTEND_ORIGIN` to the deployed frontend origin.
 
-- GET /test-db → Test DB connection
+Run `moneytour-api/sql/postgresql-supabase.sql` in Supabase SQL Editor for production, or
+`moneytour-api/sql/mysql-workbench.sql` for local MySQL Workbench testing. Both schemas
+include users, password-reset fields, income/expense transactions, indexes, and a balance
+summary view. The API computes balances from transaction records.
 
-**Frontend Pages**
-`index.html` - Login/Register page
-`login.html` - Login page
-`register.html` - registration page
-`dashboard.html` - Add new transaction & view balance
-`transHistory.html` - View transaction history & current balance
+From the backend directory, `pnpm dev` starts the local API with automatic restarts and
+`pnpm test:unit` / `pnpm test:e2e` run its backend suites.
 
-**Future Improvements**
-Session management or JWT authentication.
-Better UI styling with modern frameworks.
-Export transactions (CSV/PDF).
-Data visualization (charts for spending trends).
-
-## License
-
-- MIT License © 2024 MoneyTour Project.
-  This project was done for my personal development. Feel free to modify it for your own needs.
-
-Click the <a href="https://cyprianchux.github.io/moneytour/api/">link</a> to visit the page.
+Click the <a href="https://moneytour.vercel.app" target="_blank">Production link</a> or the <a href="https://cyprianchux.github.io/moneytour/api/" target="_blank">GitHub link</a> to visit the page.
