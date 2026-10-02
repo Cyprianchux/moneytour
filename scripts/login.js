@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const response = await fetch(window.moneytourApiUrl("/api/login"), {
           method: 'POST',
+          credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password })
         });
@@ -19,13 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (response.ok && result.success) {
           // ✅ Save userId in localStorage
-          localStorage.setItem('myUserId', JSON.stringify(result.userId));
-          localStorage.setItem('myUsername', username);
+          localStorage.setItem('myUserId', String(result.userId));
+          localStorage.setItem('myUsername', result.username || username);
+          sessionStorage.setItem("moneytourToken", result.token);
 
           alert('Login successful!');
-          
-          // Redirect to dashboard page
-          window.location.href = "dashboard.html";
+          const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+          const safeReturnTo = returnTo && /^\/?(dashboard|transHistory)\.html$/.test(returnTo)
+            ? returnTo.replace(/^\//, "")
+            : "dashboard.html";
+          window.location.replace(safeReturnTo);
         } else {
           alert(result.error || 'Login failed');
         }

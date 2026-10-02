@@ -31,6 +31,7 @@ DB_PASSWORD=your-local-password
 DB_NAME=moneytour
 DB_PORT=3306
 PORT=5500
+JWT_SECRET=generate-a-long-random-secret
 ```
 
 Set `window.MONEYTOUR_API_URL` in `scripts/config.js` to the API origin if the deployed frontend
@@ -58,7 +59,12 @@ The API lives in `moneytour-api`. It supports local MySQL and PostgreSQL with th
 routes; `DB_CLIENT=mysql` selects MySQL, while `DB_CLIENT=postgres` selects PostgreSQL.
 On Vercel, PostgreSQL is selected automatically. Configure `SUPABASE_DB_URL` (preferred,
 using a Supabase session pooler connection string) or `DATABASE_URL`, and optionally set
-`FRONTEND_ORIGIN` to the deployed frontend origin.
+`FRONTEND_ORIGIN` to the deployed frontend origin. Set a unique, long `JWT_SECRET` in the
+Vercel environment variables; the API refuses to start in production without it.
+
+Local development includes a convenience login: `testuser5` / `passWorded5`. It is disabled
+automatically on Vercel and in production builds. Dashboard and transaction history require
+a signed session, and finance API routes verify the session and restrict data to its user.
 
 Run `moneytour-api/sql/postgresql-supabase.sql` in Supabase SQL Editor for production, or
 `moneytour-api/sql/mysql-workbench.sql` for local MySQL Workbench testing. Both schemas

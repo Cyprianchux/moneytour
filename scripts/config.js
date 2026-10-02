@@ -2,3 +2,7 @@
 window.MONEYTOUR_API_URL = window.MONEYTOUR_API_URL || "";
 window.moneytourApiUrl = (path) =>
   `${window.MONEYTOUR_API_URL.replace(/\/$/, "")}${path}`;
+window.moneytourAuthHeaders = () => {
+  const token = sessionStorage.getItem("moneytourToken");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};

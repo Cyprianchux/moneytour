@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch(window.moneytourApiUrl("/api/resetPassword"), {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp, password }),
       });
@@ -89,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch(window.moneytourApiUrl("/api/forgotPassword"), {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: savedEmail }),
       });

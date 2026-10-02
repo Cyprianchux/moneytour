@@ -1,5 +1,7 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const userId = localStorage.getItem('myUserId');
+document.addEventListener('DOMContentLoaded', async () => {
+  const session = await window.moneytourSessionReady;
+  if (!session) return;
+  const userId = String(session.userId);
 
   if (userId === null) {
     alert('Please login first!');
@@ -11,7 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch and display transactions in a table
   async function fetchTransactions() {
     try {
-      const response = await fetch(window.moneytourApiUrl(`/api/transHistory/${userId}`));
+      const response = await fetch(window.moneytourApiUrl(`/api/transHistory/${userId}`), {
+        credentials: "include",
+        headers: window.moneytourAuthHeaders(),
+      });
 
       if (!response.ok) throw new Error("Failed to fetch transactions");
 
@@ -21,11 +26,17 @@ document.addEventListener('DOMContentLoaded', () => {
       transactions.forEach(transaction => {
         const row = transactionTable.insertRow();
         
-        row.insertCell(0).textContent = transaction.transactionId;
-        row.insertCell(1).textContent = transaction.type;
-        row.insertCell(2).textContent = transaction.particulars;
-        row.insertCell(3).textContent = `$${parseFloat(transaction.amount).toFixed(2)}`;
-        row.insertCell(4).textContent = new Date(transaction.date).toLocaleDateString();
+        [
+          ["ID", transaction.transactionId],
+          ["Type", transaction.type],
+          ["Details", transaction.particulars],
+          ["Amount", `$${parseFloat(transaction.amount).toFixed(2)}`],
+          ["Date", new Date(transaction.date).toLocaleDateString()],
+        ].forEach(([label, value]) => {
+          const cell = row.insertCell();
+          cell.dataset.label = label;
+          cell.textContent = value;
+        });
       });
     } catch (error) {
       console.error("Error fetching transactions:", error);

@@ -14,8 +14,12 @@
     <meta name="description" content="View your transaction history" />
     <link rel="stylesheet" href="../styles/index.css" />
     <link rel="stylesheet" href="../styles/transHistory.css" />
+    <link rel="stylesheet" href="../styles/mobile.css" />
+    <style>
+      body.auth-checking { visibility: hidden; }
+    </style>
   </head>
-  <body>
+  <body class="auth-checking">
     <div class="container-header">
       <div class="logo">
         <a href="dashboard.html"
@@ -30,7 +34,7 @@
         <button type="button" onclick="window.location.href = 'dashboard.html'">
           Add Transaction
         </button>
-        <button type="button" onclick="window.location.href = 'index.html'">
+        <button type="button" onclick="window.moneytourLogout()">
           Logout
         </button>
       </div>
@@ -59,6 +63,7 @@
     <footer>&copy; 2024 MoneyTour</footer>
 
     <script src="../scripts/config.js"></script>
+    <script src="../scripts/auth.js"></script>
     <script src="../scripts/transHistory.js"></script>
     <script src="../scripts/dashboard.js"></script>
   </body>

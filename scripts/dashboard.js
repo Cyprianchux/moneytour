@@ -1,7 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const userId = localStorage.getItem("myUserId");
+document.addEventListener('DOMContentLoaded', async () => {
+  const session = await window.moneytourSessionReady;
+  if (!session) return;
+  const userId = String(session.userId);
   // console.log("Logged in userId: ", userId);
-  const myUsername = localStorage.getItem('myUsername');
+  const myUsername = session.username;
   const usernameSpan = document.getElementById("username");
 /*
   if (userId === null) {
@@ -30,7 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch and display balance
   async function fetchBalance() {
     try {
-      const response = await fetch(window.moneytourApiUrl(`/api/balance/${userId}`));
+      const response = await fetch(window.moneytourApiUrl(`/api/balance/${userId}`), {
+        credentials: "include",
+        headers: window.moneytourAuthHeaders(),
+      });
       if (!response.ok) throw new Error("Failed to fetch balance");
 
       const result = await response.json();
@@ -50,7 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch and display recent transactions
   async function fetchTransactions() {
     try {
-      const response = await fetch(window.moneytourApiUrl(`/api/transHistory/${userId}`));
+      const response = await fetch(window.moneytourApiUrl(`/api/transHistory/${userId}`), {
+        credentials: "include",
+        headers: window.moneytourAuthHeaders(),
+      });
 
       if (!response.ok) throw new Error("Failed to fetch transactions");
 
@@ -96,7 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const response = await fetch(window.moneytourApiUrl("/api/transHistory"), {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          credentials: "include",
+          headers: { 'Content-Type': 'application/json', ...window.moneytourAuthHeaders() },
           body: JSON.stringify({ userId, type, particulars, amount, date })
         });
 

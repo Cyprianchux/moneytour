@@ -18,30 +18,68 @@ test("registration requires terms acceptance and matching passwords", async ({ p
   await expect(page).toHaveURL(/register\.html$/);
 });
 
-test("login persists the user and opens the dashboard", async ({ page }) => {
-  await page.route("**/api/login", (route) =>
-    route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ success: true, message: "Login successful!", userId: 7 }),
-    }),
-  );
-
+test("login persists the authenticated user and opens the dashboard", async ({ page }) => {
   await page.goto("/login.html");
-  await page.fill("#username", "ada");
-  await page.fill("#password", "secret");
+  await page.fill("#username", "testuser5");
+  await page.fill("#password", "passWorded5");
   page.once("dialog", (dialog) => dialog.accept());
   await page.locator("#login-form").evaluate((form) => form.requestSubmit());
 
   await expect(page).toHaveURL(/dashboard\.html$/);
-  await expect(page.evaluate(() => localStorage.getItem("myUserId"))).resolves.toBe("7");
-  await expect(page.locator("#username")).toHaveText("Ada");
+  await expect(page.evaluate(() => localStorage.getItem("myUsername"))).resolves.toBe("testuser5");
+  await expect(page.locator("#username")).toHaveText("Testuser5");
+});
+
+test("private pages redirect to login before a session exists", async ({ page }) => {
+  await page.goto("/dashboard.html");
+  await expect(page).toHaveURL(/login\.html\?returnTo=/);
+  await page.goto("/transHistory.html");
+  await expect(page).toHaveURL(/login\.html\?returnTo=/);
+});
+
+test("a valid API session restores access without client-side cached user data", async ({ page }) => {
+  await page.request.post("http://127.0.0.1:5501/api/login", {
+    data: { username: "testuser5", password: "passWorded5" },
+  });
+  await page.addInitScript(() => localStorage.clear());
+
+  await page.goto("/dashboard.html");
+
+  await expect(page).toHaveURL(/dashboard\.html$/);
+  await expect(page.locator(".welcome-username")).toContainText("Testuser5");
+});
+
+test("all non-home pages fit narrow mobile viewports", async ({ page }) => {
+  await page.request.post("http://127.0.0.1:5501/api/login", {
+    data: { username: "testuser5", password: "passWorded5" },
+  });
+
+  const pages = [
+    "/dashboard.html",
+    "/transHistory.html",
+    "/login.html",
+    "/register.html",
+    "/forgotPassword.html",
+    "/resetPassword.html",
+    "/terms.html",
+    "/privacy.html",
+  ];
+
+  for (const width of [320, 360, 390]) {
+    await page.setViewportSize({ width, height: 800 });
+    for (const path of pages) {
+      await page.goto(path);
+      await expect.poll(
+        () => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+        { message: `${path} should fit at ${width}px` },
+      ).toBe(true);
+    }
+  }
 });
 
 test("dashboard submits the default transaction type as an expense", async ({ page }) => {
-  await page.addInitScript(() => {
-    localStorage.setItem("myUserId", "7");
-    localStorage.setItem("myUsername", "ada");
+  await page.request.post("http://127.0.0.1:5501/api/login", {
+    data: { username: "testuser5", password: "passWorded5" },
   });
   let submittedTransaction;
   await page.route("**/api/transHistory", async (route) => {
