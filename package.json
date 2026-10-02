@@ -1,0 +1,14 @@
+{
+  "name": "moneytour-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node ../moneytour-api/server.js",
+    "test": "pnpm run test:unit && pnpm run test:e2e",
+    "test:unit": "node --test test/unit/*.test.js",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  }
+}
