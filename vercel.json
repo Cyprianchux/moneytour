@@ -4,12 +4,21 @@
       "source": "/:path.html",
       "destination": "/:path",
       "permanent": true
+    },
+    {
+      "source": "/src/:path.html",
+      "destination": "/src/:path",
+      "permanent": true
     }
   ],
   "rewrites": [
     {
       "source": "/:path",
       "destination": "/:path.html"
+    },
+    {
+      "source": "/src/:path",
+      "destination": "/src/:path.html"
     }
   ]
 }
