@@ -12,12 +12,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 */
-  // Capitalize first letter of username
   let formattedUsername = '';
   if (myUsername) {
-    formattedUsername = myUsername.charAt(0).toUpperCase() + myUsername.slice(1);
+    formattedUsername = myUsername.charAt(0).toUpperCase() + myUsername.slice(1).toLowerCase();
     document.getElementById("username").textContent = formattedUsername;
-    document.getElementById("profileMark").textContent = myUsername.slice(0, 2).toUpperCase();
+    document.getElementById("profileMark").textContent = formattedUsername.slice(0, 2).toUpperCase();
     document.getElementById("greeting").textContent = `Good morning, ${formattedUsername}`;
   }
 
@@ -26,8 +25,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const balanceDisplay = document.getElementById('balance');
   const incomeDisplay = document.getElementById('income');
   const expenseDisplay = document.getElementById('expense');
+  const overviewCard = document.querySelector(".dashboard-card");
 
   const currency = '₦';
+
+  function formatCurrency(amount) {
+    return `${currency}${window.moneytourFormatAmount(amount)}`;
+  }
 
   // Fetch and display balance
   async function fetchBalance() {
@@ -40,13 +44,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const result = await response.json();
 
-      const totalIncome = result.totalIncome ? parseFloat(result.totalIncome) : 0;
-      const totalExpense = result.totalExpense ? parseFloat(result.totalExpense) : 0;
-      const balance = result.balance ? parseFloat(result.balance) : 0;
+      const totalIncome = Number(result.totalIncome || 0);
+      const totalExpense = Number(result.totalExpense || 0);
+      const balance = Number(result.balance || 0);
 
-      balanceDisplay.textContent = `${currency}${balance.toFixed(2)}`;
-      incomeDisplay.textContent = `${currency}${totalIncome.toFixed(2)}`;
-      expenseDisplay.textContent = `${currency}${totalExpense.toFixed(2)}`;
+      balanceDisplay.textContent = formatCurrency(balance);
+      incomeDisplay.textContent = formatCurrency(totalIncome);
+      expenseDisplay.textContent = formatCurrency(totalExpense);
+      const largestAmount = Math.max(Math.abs(balance), totalIncome, totalExpense);
+      const amountDigits = Math.max(1, Math.floor(largestAmount).toString().length);
+      const cardWidth = Math.min(560, 500 + (amountDigits - 1) * 8);
+      overviewCard.style.width = `min(${cardWidth}px, 100%)`;
     } catch (error) {
       console.error("Error fetching balance:", error);
     }
@@ -81,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         item.innerHTML = `
           <span class="activity-icon">${isIncome ? '↗' : '↘'}</span>
           <span><b>${transaction.particulars}</b><small>${new Date(transaction.date).toLocaleDateString()}</small></span>
-          <strong class="${isIncome ? 'positive' : ''}">${isIncome ? '+' : '-'}${currency}${parseFloat(transaction.amount).toFixed(2)}</strong>
+          <strong class="${isIncome ? 'positive' : ''}">${isIncome ? '+' : '-'}${formatCurrency(transaction.amount)}</strong>
         `;
         activityList.appendChild(item);
       });
@@ -96,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       e.preventDefault();
 
       const formData = new FormData(transactionForm);
-      const type = transactionForm.elements.transType.checked ? 'income' : 'expense';
+      const type = transactionForm.elements.transType.checked ? 'expense' : 'income';
       const particulars = formData.get('particulars');
       const amount = formData.get('amount');
       const date = formData.get('date');
