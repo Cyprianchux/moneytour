@@ -113,9 +113,9 @@ main > section h3 {
   align-items: center;
   display: grid;
   gap: 40px;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 480px);
+  grid-template-columns: minmax(0, 1fr) minmax(500px, 560px);
   margin: 0 auto 32px;
-  max-width: 980px;
+  max-width: 1020px;
 }
 
 .howto-card {
@@ -186,7 +186,8 @@ main > section h3 {
   padding: 25px;
   position: relative;
   transform: none;
-  width: 100%;
+  width: 500px;
+  max-width: 100%;
 }
 
 .dashboard-top,
@@ -469,18 +470,9 @@ input#transType:checked ~ .option::before {
   left: 50%;
 }
 
-input#transType:checked ~ .option span:nth-child(2),
-.option span:nth-child(1) {
-  color: var(--navy);
-}
-
-input#transType ~ .option span:nth-child(2) {
-  color: var(--navy);
-}
-
-input#transType:checked ~ .option span:nth-child(1) {
-  color: var(--muted);
-}
+.option span:first-child { color: var(--white); }
+input#transType:checked ~ .option span:first-child { color: var(--muted); }
+input#transType:checked ~ .option span:last-child { color: var(--white); }
 
 footer {
   background: var(--navy);
@@ -496,7 +488,7 @@ footer {
   margin: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .howto-card {
     display: none;
   }
@@ -509,7 +501,7 @@ footer {
 
   .dashboard-card {
     margin: 0;
-    max-width: 480px;
+    max-width: 520px;
   }
 
   main {
@@ -582,5 +574,3 @@ footer {
     padding: 10px 12px;
   }
 }
-
-

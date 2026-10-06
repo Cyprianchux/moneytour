@@ -285,7 +285,7 @@ form > div {
     display: grid;
     font-size: .88rem;
     gap: 10px;
-    grid-template-columns: minmax(88px, 38%) minmax(0, 1fr);
+    grid-template-columns: minmax(88px, 35%) minmax(0, 1fr);
     overflow-wrap: anywhere;
     padding: 7px 0;
     text-align: right;
@@ -296,6 +296,7 @@ form > div {
     content: attr(data-label);
     font-size: .72rem;
     font-weight: 700;
+    position: static;
     text-align: left;
     text-transform: uppercase;
   }
