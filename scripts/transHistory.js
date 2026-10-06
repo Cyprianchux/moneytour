@@ -10,6 +10,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const transactionTable = document.getElementById('transactionTable').getElementsByTagName('tbody')[0];
 
+  async function fetchBalance() {
+    try {
+      const response = await fetch(window.moneytourApiUrl(`/api/balance/${userId}`), {
+        credentials: "include",
+        headers: window.moneytourAuthHeaders(),
+      });
+      if (!response.ok) throw new Error("Failed to fetch balance");
+
+      const result = await response.json();
+      document.getElementById("balance").textContent =
+        `₦${window.moneytourFormatAmount(result.balance || 0)}`;
+    } catch (error) {
+      console.error("Error fetching balance:", error);
+    }
+  }
+
   // Fetch and display transactions in a table
   async function fetchTransactions() {
     try {
@@ -30,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           ["ID", transaction.transactionId],
           ["Type", transaction.type],
           ["Details", transaction.particulars],
-          ["Amount", `$${parseFloat(transaction.amount).toFixed(2)}`],
+          ["Amount", `₦${window.moneytourFormatAmount(transaction.amount)}`],
           ["Date", new Date(transaction.date).toLocaleDateString()],
         ].forEach(([label, value]) => {
           const cell = row.insertCell();
@@ -42,5 +58,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.error("Error fetching transactions:", error);
     }
   }
+  fetchBalance();
   fetchTransactions();
 });
