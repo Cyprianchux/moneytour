@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "/index.html",
+      "destination": "/home",
+      "permanent": true
+    },
+    {
       "source": "/:path.html",
       "destination": "/:path",
       "permanent": true
@@ -12,6 +17,10 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/home",
+      "destination": "/index.html"
+    },
     {
       "source": "/:path",
       "destination": "/:path.html"
