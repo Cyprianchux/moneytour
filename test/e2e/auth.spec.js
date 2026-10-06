@@ -77,13 +77,13 @@ test("all non-home pages fit narrow mobile viewports", async ({ page }) => {
   }
 });
 
-test("dashboard submits the default transaction type as an expense", async ({ page }) => {
+test("dashboard toggle selects income first, switches to expenses, and submits the selected type", async ({ page }) => {
   await page.request.post("http://127.0.0.1:5501/api/login", {
     data: { username: "testuser5", password: "passWorded5" },
   });
-  let submittedTransaction;
+  const submittedTransactions = [];
   await page.route("**/api/transHistory", async (route) => {
-    submittedTransaction = route.request().postDataJSON();
+    submittedTransactions.push(route.request().postDataJSON());
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -91,12 +91,64 @@ test("dashboard submits the default transaction type as an expense", async ({ pa
     });
   });
   await page.goto("/dashboard.html");
+  const toggle = page.locator("#transType");
+  const incomeLabel = page.locator(".option span").nth(0);
+  const expenseLabel = page.locator(".option span").nth(1);
+  await expect(toggle).not.toBeChecked();
+  await expect(incomeLabel).toHaveCSS("color", "rgb(255, 255, 255)");
+  await expect(expenseLabel).not.toHaveCSS("color", "rgb(255, 255, 255)");
+
   await page.fill('input[name="particulars"]', "Lunch");
   await page.fill('input[name="amount"]', "25");
   await page.fill('input[name="date"]', "2026-10-02");
   const alert = page.waitForEvent("dialog");
   await page.locator("#transactionForm").evaluate((form) => form.requestSubmit());
   await (await alert).accept();
+  await expect.poll(() => submittedTransactions[0]?.type).toBe("income");
 
-  await expect.poll(() => submittedTransaction?.type).toBe("expense");
+  await page.locator('label[for="transType"]').click();
+  await expect(toggle).toBeChecked();
+  await expect(expenseLabel).toHaveCSS("color", "rgb(255, 255, 255)");
+  await page.fill('input[name="particulars"]', "Transport");
+  await page.fill('input[name="amount"]', "10");
+  await page.fill('input[name="date"]', "2026-10-02");
+  const expenseAlert = page.waitForEvent("dialog");
+  await page.locator("#transactionForm").evaluate((form) => form.requestSubmit());
+  await (await expenseAlert).accept();
+  await expect.poll(() => submittedTransactions[1]?.type).toBe("expense");
+});
+
+test("dashboard and transaction history share formatted balance and transaction amounts", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.request.post("http://127.0.0.1:5501/api/login", {
+    data: { username: "testuser5", password: "passWorded5" },
+  });
+  await page.route("**/api/balance/*", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({ balance: 1234567.89, totalIncome: 2000000, totalExpense: 765432.11 }),
+  }));
+  await page.route("**/api/transHistory/*", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify([{
+      transactionId: 1,
+      type: "income",
+      particulars: "Salary",
+      amount: 12345.67,
+      date: "2026-10-06",
+    }]),
+  }));
+
+  await page.goto("/dashboard.html");
+  await expect(page.locator("#balance")).toHaveText("₦1,234,567.89");
+  await expect(page.locator(".activity-item strong")).toHaveText("+₦12,345.67");
+  const overviewWidth = await page.locator(".dashboard-card").evaluate((card) => card.getBoundingClientRect().width);
+  expect(overviewWidth).toBeGreaterThanOrEqual(540);
+
+  await page.setViewportSize({ width: 390, height: 800 });
+  await page.goto("/transHistory.html");
+  await expect(page.locator("#balance")).toHaveText("₦1,234,567.89");
+  await expect(page.locator('td[data-label="Amount"]')).toHaveText("₦12,345.67");
+  await expect(page.locator("tbody td").first()).toHaveCSS("display", "grid");
 });

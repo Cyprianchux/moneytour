@@ -42,3 +42,22 @@ test("preserves a runtime API origin override", () => {
     "https://api.example.com/api/login",
   );
 });
+
+test("formats monetary amounts with grouped thousands and two decimals", () => {
+  const window = loadConfig();
+
+  assert.equal(window.moneytourFormatAmount(1234567.8), "1,234,567.80");
+});
+
+test("routes the home path to index.html and redirects index.html to home", () => {
+  const vercelConfig = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "../../vercel.json"), "utf8"),
+  );
+
+  assert.ok(vercelConfig.redirects.some(
+    ({ source, destination }) => source === "/index.html" && destination === "/home",
+  ));
+  assert.ok(vercelConfig.rewrites.some(
+    ({ source, destination }) => source === "/home" && destination === "/index.html",
+  ));
+});

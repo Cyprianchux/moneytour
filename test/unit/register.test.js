@@ -9,11 +9,16 @@ const registerScript = fs.readFileSync(
   "utf8",
 );
 
-function setupRegisterForm({ terms = true, password = "secret", confirmPassword = "secret" } = {}) {
+function setupRegisterForm({
+  terms = true,
+  username = "ada",
+  password = "secret",
+  confirmPassword = "secret",
+} = {}) {
   const elements = {
     "register-form": { addEventListener(_event, handler) { this.submit = handler; } },
     email: { value: "ada@example.com" },
-    username: { value: "ada" },
+    username: { value: username },
     password: { value: password },
     "confirm-password": { value: confirmPassword },
     terms: { checked: terms },
@@ -40,6 +45,13 @@ test("registration blocks submission when terms are not accepted", async () => {
 
   assert.deepEqual(alerts, ["Please accept our Terms of Service"]);
   assert.equal(requests.length, 0);
+});
+
+test("registration stores usernames in lowercase", async () => {
+  const { elements, requests } = setupRegisterForm({ username: "Ada Lovelace" });
+  await elements["register-form"].submit({ preventDefault() {} });
+
+  assert.equal(JSON.parse(requests[0][1].body).username, "ada lovelace");
 });
 
 test("registration blocks mismatched passwords", async () => {
