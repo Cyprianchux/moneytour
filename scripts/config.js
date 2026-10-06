@@ -7,6 +7,11 @@ window.MONEYTOUR_API_URL =
     : "https://moneytour-api.vercel.app");
 window.moneytourApiUrl = (path) =>
   `${window.MONEYTOUR_API_URL.replace(/\/$/, "")}${path}`;
+window.moneytourFormatAmount = (amount) =>
+  new Intl.NumberFormat("en-NG", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(amount));
 window.moneytourAuthHeaders = () => {
   const token = sessionStorage.getItem("moneytourToken");
   return token ? { Authorization: `Bearer ${token}` } : {};
