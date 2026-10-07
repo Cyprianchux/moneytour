@@ -140,6 +140,15 @@ test("dashboard header uses the homepage nav layout and form section width", asy
   const logoutWidth = await logout.evaluate((element) => element.getBoundingClientRect().width);
   expect(Math.abs(viewWidth - logoutWidth)).toBeLessThanOrEqual(3);
   expect(navWidth).toBeGreaterThan(viewWidth);
+
+  for (const width of [320, 390, 640]) {
+    await page.setViewportSize({ width, height: 800 });
+    const brandBox = await nav.locator(".brand").boundingBox();
+    const navBox = await nav.locator(".top-nav").boundingBox();
+    expect(Math.abs(brandBox.y + brandBox.height / 2 - navBox.y - navBox.height / 2)).toBeLessThanOrEqual(1);
+    expect(navBox.x).toBeGreaterThanOrEqual(brandBox.x + brandBox.width);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  }
 });
 
 test("transaction history uses the homepage header and shows balance above the history card", async ({ page }) => {
@@ -167,6 +176,9 @@ test("transaction history uses the homepage header and shows balance above the h
   const addWidth = await addTransaction.evaluate((element) => element.getBoundingClientRect().width);
   const logoutWidth = await logout.evaluate((element) => element.getBoundingClientRect().width);
   expect(Math.abs(addWidth - logoutWidth)).toBeLessThanOrEqual(3);
+  const brandBox = await nav.locator(".brand").boundingBox();
+  const navBox = await nav.locator(".top-nav").boundingBox();
+  expect(Math.abs(brandBox.y + brandBox.height / 2 - navBox.y - navBox.height / 2)).toBeLessThanOrEqual(1);
 });
 
 test("dashboard toggle selects income first, switches to expenses, and submits the selected type", async ({ page }) => {
