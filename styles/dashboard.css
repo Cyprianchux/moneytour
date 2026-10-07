@@ -12,7 +12,7 @@
 .form-section {
   margin-left: auto;
   margin-right: auto;
-  max-width: 500px;
+  max-width: 800px;
   width: 100%;
 }
 
@@ -40,7 +40,7 @@ header.site-header {
   z-index: 10;
 }
 
-.dashboard-nav {
+.site-header .nav-wrap {
   height: auto;
   min-height: 82px;
 }
@@ -51,7 +51,7 @@ header.site-header {
   align-items: center;
 }
 
-.dashboard-top-nav .button {
+.dashboard-top-nav .button-small {
   font-family: "DM Sans", Arial, sans-serif;
   cursor: pointer;
 }
@@ -540,7 +540,7 @@ footer {
 }
 
 @media (max-width: 480px) {
-  .dashboard-nav {
+  .site-header .nav-wrap {
     min-height: 0;
   }
 
