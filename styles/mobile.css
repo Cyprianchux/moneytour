@@ -130,6 +130,23 @@ form > div {
     width: 100%;
   }
 
+  .site-header .dashboard-top-nav > a,
+  .site-header .dashboard-top-nav > button {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .site-header .history-top-nav {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .site-header .history-top-nav > a,
+  .site-header .history-top-nav > button {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
   .top-nav a,
   .top-nav button,
   .dashboard-top-nav button {
