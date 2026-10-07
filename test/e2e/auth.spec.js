@@ -117,6 +117,58 @@ test("how-it-works content toggles on mobile and remains visible on desktop", as
   await expect(howtoToggle).toHaveAttribute("aria-expanded", "true");
 });
 
+test("dashboard header uses the homepage nav layout and form section width", async ({ page }) => {
+  await page.request.post("http://127.0.0.1:5501/api/login", {
+    data: { username: "testuser5", password: "passWorded5" },
+  });
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/dashboard.html");
+  const nav = page.locator(".site-header .nav-wrap");
+  const viewTransactions = page.getByRole("link", { name: "View Transactions" });
+  const logout = page.getByRole("button", { name: "Logout" });
+
+  await expect(nav).toHaveClass(/nav-wrap/);
+  await expect(nav.locator(".top-nav")).toHaveClass(/top-nav/);
+  await expect(viewTransactions).toHaveClass(/nav-login/);
+  await expect(logout).toHaveClass(/button-small/);
+  expect(await page.locator(".form-section").evaluate((section) => getComputedStyle(section).maxWidth)).toBe("800px");
+
+  await page.setViewportSize({ width: 390, height: 800 });
+  const navWidth = await nav.locator(".top-nav").evaluate((element) => element.getBoundingClientRect().width);
+  const viewWidth = await viewTransactions.evaluate((element) => element.getBoundingClientRect().width);
+  const logoutWidth = await logout.evaluate((element) => element.getBoundingClientRect().width);
+  expect(Math.abs(viewWidth - logoutWidth)).toBeLessThanOrEqual(3);
+  expect(navWidth).toBeGreaterThan(viewWidth);
+});
+
+test("transaction history uses the homepage header and shows balance above the history card", async ({ page }) => {
+  await page.request.post("http://127.0.0.1:5501/api/login", {
+    data: { username: "testuser5", password: "passWorded5" },
+  });
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/transHistory.html");
+
+  const nav = page.locator(".site-header .nav-wrap");
+  const addTransaction = page.getByRole("link", { name: "Add Transaction" });
+  const logout = page.getByRole("button", { name: "Logout" });
+  const balance = page.locator(".transbalance");
+  const historyCard = page.locator(".container-transaction");
+
+  await expect(nav).toHaveClass(/nav-wrap/);
+  await expect(nav.locator(".brand")).toContainText("MoneyTour");
+  await expect(nav.locator(".top-nav")).toHaveClass(/top-nav/);
+  await expect(addTransaction).toHaveClass(/nav-login/);
+  await expect(logout).toHaveClass(/button-small/);
+  await expect(balance).toHaveCount(1);
+  await expect(historyCard.locator(".transbalance + .t-hist")).toHaveCount(1);
+
+  await page.setViewportSize({ width: 390, height: 800 });
+  const addWidth = await addTransaction.evaluate((element) => element.getBoundingClientRect().width);
+  const logoutWidth = await logout.evaluate((element) => element.getBoundingClientRect().width);
+  expect(Math.abs(addWidth - logoutWidth)).toBeLessThanOrEqual(3);
+});
+
 test("dashboard toggle selects income first, switches to expenses, and submits the selected type", async ({ page }) => {
   await page.request.post("http://127.0.0.1:5501/api/login", {
     data: { username: "testuser5", password: "passWorded5" },
