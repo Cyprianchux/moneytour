@@ -134,6 +134,7 @@ main > section h3 {
   display: inline-block;
   transform: rotate(90deg);
   transition: transform .2s ease;
+  font-weight: bold;
 }
 
 .howto-content {
