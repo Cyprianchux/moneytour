@@ -77,6 +77,46 @@ test("all non-home pages fit narrow mobile viewports", async ({ page }) => {
   }
 });
 
+test("dashboard greets the user based on the device's local time", async ({ page }) => {
+  await page.request.post("http://127.0.0.1:5501/api/login", {
+    data: { username: "testuser5", password: "passWorded5" },
+  });
+
+  for (const [time, greeting] of [
+    ["2026-10-07T11:59:00", "Good morning, Testuser5"],
+    ["2026-10-07T12:00:00", "Good afternoon, Testuser5"],
+    ["2026-10-07T17:29:00", "Good afternoon, Testuser5"],
+    ["2026-10-07T17:30:00", "Good evening, Testuser5"],
+  ]) {
+    await page.clock.setFixedTime(new Date(time));
+    await page.goto("/dashboard.html");
+    await expect(page.locator("#greeting")).toHaveText(greeting);
+  }
+});
+
+test("how-it-works content toggles on mobile and remains visible on desktop", async ({ page }) => {
+  await page.request.post("http://127.0.0.1:5501/api/login", {
+    data: { username: "testuser5", password: "passWorded5" },
+  });
+
+  await page.setViewportSize({ width: 390, height: 800 });
+  await page.goto("/dashboard.html");
+  const howtoToggle = page.getByRole("button", { name: "How it works" });
+  const howtoContent = page.locator("#howtoContent");
+  await expect(howtoToggle).toHaveAttribute("aria-expanded", "false");
+  await expect(howtoContent).toBeHidden();
+  await howtoToggle.click();
+  await expect(howtoToggle).toHaveAttribute("aria-expanded", "true");
+  await expect(howtoContent).toBeVisible();
+  await howtoToggle.click();
+  await expect(howtoToggle).toHaveAttribute("aria-expanded", "false");
+  await expect(howtoContent).toBeHidden();
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(howtoContent).toBeVisible();
+  await expect(howtoToggle).toHaveAttribute("aria-expanded", "true");
+});
+
 test("dashboard toggle selects income first, switches to expenses, and submits the selected type", async ({ page }) => {
   await page.request.post("http://127.0.0.1:5501/api/login", {
     data: { username: "testuser5", password: "passWorded5" },

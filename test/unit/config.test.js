@@ -49,6 +49,18 @@ test("formats monetary amounts with grouped thousands and two decimals", () => {
   assert.equal(window.moneytourFormatAmount(1234567.8), "1,234,567.80");
 });
 
+test("classifies the local time into the dashboard greeting periods", () => {
+  const window = loadConfig();
+  const localTime = (hour, minute) => new Date(2026, 0, 1, hour, minute);
+
+  assert.equal(window.moneytourTimeOfDay(localTime(0, 0)), "morning");
+  assert.equal(window.moneytourTimeOfDay(localTime(11, 59)), "morning");
+  assert.equal(window.moneytourTimeOfDay(localTime(12, 0)), "afternoon");
+  assert.equal(window.moneytourTimeOfDay(localTime(17, 29)), "afternoon");
+  assert.equal(window.moneytourTimeOfDay(localTime(17, 30)), "evening");
+  assert.equal(window.moneytourTimeOfDay(localTime(23, 59)), "evening");
+});
+
 test("routes the home path to index.html and redirects index.html to home", () => {
   const vercelConfig = JSON.parse(
     fs.readFileSync(path.join(__dirname, "../../vercel.json"), "utf8"),
