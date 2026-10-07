@@ -9,6 +9,13 @@
   --white: #ffffff;
 }
 
+.form-section {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 500px;
+  width: 100%;
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -44,23 +51,9 @@ header.site-header {
   align-items: center;
 }
 
-.dashboard-top-nav button {
-  background: var(--purple);
-  color: var(--white);
-  border: 1px solid var(--purple);
-  border-radius: 8px;
-  padding: 11px 17px;
-  font-size: .92rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+.dashboard-top-nav .button {
   font-family: "DM Sans", Arial, sans-serif;
-}
-
-.dashboard-top-nav button:hover {
-  background: var(--purple-dark);
-  box-shadow: 0 10px 24px rgba(83, 4, 80, .2);
-  transform: translateY(-2px);
+  cursor: pointer;
 }
 
 .welcome-username {
@@ -124,6 +117,7 @@ main > section h3 {
 
 .howto-badge {
   background: var(--purple-soft);
+  border: 0;
   border-radius: 999px;
   color: var(--purple);
   display: inline-block;
@@ -132,6 +126,10 @@ main > section h3 {
   letter-spacing: .1em;
   padding: 6px 12px;
   text-transform: uppercase;
+}
+
+.howto-content {
+  display: block;
 }
 
 .howto-card h2 {
@@ -490,7 +488,26 @@ footer {
 
 @media (max-width: 900px) {
   .howto-card {
+    max-width: 520px;
+    width: 100%;
+  }
+
+  .howto-badge {
+    cursor: pointer;
+    min-height: 44px;
+  }
+
+  .howto-content {
     display: none;
+    padding: 0 12px 8px;
+  }
+
+  .howto-card.is-open .howto-content {
+    display: block;
+  }
+
+  .howto-card.is-open .howto-badge {
+    margin-bottom: 12px;
   }
 
   .dashboard-hero {
@@ -533,7 +550,7 @@ footer {
     flex-wrap: wrap;
   }
 
-  .dashboard-top-nav button {
+  .dashboard-top-nav .button {
     flex: 1;
     min-width: 120px;
     padding: 10px 12px;

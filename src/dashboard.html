@@ -30,16 +30,10 @@
           <span>Money<span>Tour</span></span>
         </a>
         <nav class="top-nav dashboard-top-nav">
-          <button
-            type="button"
-            onclick="window.location.href = 'transHistory.html'"
-          >
+          <a class="button button-small" href="transHistory.html">
             View Transactions
-          </button>
-          <button
-            type="button"
-            onclick="window.moneytourLogout()"
-          >
+          </a>
+          <button class="button button-small" type="button" onclick="window.moneytourLogout()">
             Logout
           </button>
         </nav>
@@ -51,18 +45,28 @@
     <main class="dashboard-main">
       <div class="dashboard-hero">
         <aside class="howto-card">
-          <span class="howto-badge">How it works</span>
-          <h2>Your dashboard at a glance</h2>
-          <p>
-            Track your money in three simple steps. Add income and expenses
-            below, watch your running total update in the overview, and review
-            your recent activity to stay in control.
-          </p>
-          <ul>
-            <li><span>1</span> Pick Income or Expense</li>
-            <li><span>2</span> Enter details, amount and date</li>
-            <li><span>3</span> Submit to refresh your balance</li>
-          </ul>
+          <button
+            class="howto-badge"
+            id="howtoToggle"
+            type="button"
+            aria-expanded="true"
+            aria-controls="howtoContent"
+          >
+            How it works
+          </button>
+          <div class="howto-content" id="howtoContent">
+            <h2>Your dashboard at a glance</h2>
+            <p>
+              Track your money in three simple steps. Add income and expenses
+              below, watch your running total update in the overview, and review
+              your recent activity to stay in control.
+            </p>
+            <ul>
+              <li><span>1</span> Pick Income or Expense</li>
+              <li><span>2</span> Enter details, amount and date</li>
+              <li><span>3</span> Submit to refresh your balance</li>
+            </ul>
+          </div>
         </aside>
 
         <div class="dashboard-card">

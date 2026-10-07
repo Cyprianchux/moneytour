@@ -125,6 +125,11 @@ form > div {
     width: auto;
   }
 
+  .site-header .dashboard-top-nav {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
   .top-nav a,
   .top-nav button,
   .dashboard-top-nav button {
