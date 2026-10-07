@@ -16,7 +16,9 @@
     <link rel="stylesheet" href="../styles/transHistory.css" />
     <link rel="stylesheet" href="../styles/mobile.css" />
     <style>
-      body.auth-checking { visibility: hidden; }
+      body.auth-checking {
+        visibility: hidden;
+      }
     </style>
   </head>
   <body class="auth-checking">
@@ -26,11 +28,16 @@
           <img src="../media/MoneyTour.png" alt="" />
           <span>Money<span>Tour</span></span>
         </a>
-        <nav class="top-nav history-top-nav" aria-label="Transaction history navigation">
-          <a class="nav-login" href="dashboard.html">
-          Add Transaction
-          </a>
-          <button class="button button-small" type="button" onclick="window.moneytourLogout()">
+        <nav
+          class="top-nav history-top-nav"
+          aria-label="Transaction history navigation"
+        >
+          <a class="nav-login" href="dashboard.html"> Add Transaction </a>
+          <button
+            class="button button-small"
+            type="button"
+            onclick="window.moneytourLogout()"
+          >
             Logout
           </button>
         </nav>
@@ -38,11 +45,11 @@
     </header>
 
     <main>
+      <div class="transbalance">
+        <p>Balance:</p>
+        <span id="balance">₦0.00</span>
+      </div>
       <div class="container-transaction">
-        <div class="transbalance">
-          <p>Balance:</p>
-          <span id="balance">₦0.00</span>
-        </div>
         <h3 class="t-hist">Transaction History</h3>
         <table id="transactionTable">
           <thead>
