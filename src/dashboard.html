@@ -19,7 +19,9 @@
     <link rel="stylesheet" href="../styles/dashboard.css" />
     <link rel="stylesheet" href="../styles/mobile.css" />
     <style>
-      body.auth-checking { visibility: hidden; }
+      body.auth-checking {
+        visibility: hidden;
+      }
     </style>
   </head>
   <body class="auth-checking">
@@ -29,11 +31,16 @@
           <img src="../media/MoneyTour.png" alt="" />
           <span>Money<span>Tour</span></span>
         </a>
-        <nav class="top-nav dashboard-top-nav" aria-label="Dashboard navigation">
-          <a class="nav-login" href="transHistory.html">
-            View Transactions
-          </a>
-          <button class="button button-small" type="button" onclick="window.moneytourLogout()">
+        <nav
+          class="top-nav dashboard-top-nav"
+          aria-label="Dashboard navigation"
+        >
+          <a class="nav-login" href="transHistory.html"> View Transactions </a>
+          <button
+            class="button button-small"
+            type="button"
+            onclick="window.moneytourLogout()"
+          >
             Logout
           </button>
         </nav>
@@ -52,8 +59,7 @@
             aria-expanded="true"
             aria-controls="howtoContent"
           >
-            <span class="howto-arrow" aria-hidden="true">→</span>
-            How it works
+            How it works <span class="howto-arrow" aria-hidden="true">→</span>
           </button>
           <div class="howto-content" id="howtoContent">
             <h2>Your dashboard at a glance</h2>
@@ -114,8 +120,8 @@
             <label for="transType">
               <input type="checkbox" name="transType" id="transType" />
               <div class="option">
-              <span>Income</span>
-              <span>Expense</span>
+                <span>Income</span>
+                <span>Expense</span>
               </div>
             </label>
           </div>
