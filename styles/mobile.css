@@ -197,11 +197,12 @@ form > div {
 
   .site-header .dashboard-top-nav,
   .site-header .history-top-nav {
-    flex: 0 1 auto;
+    flex: 1 1 0;
     flex-wrap: nowrap;
     gap: clamp(4px, 1vw, 8px);
     min-width: 0;
     width: auto;
+    justify-content: flex-end;
   }
 
   .site-header .dashboard-top-nav > a,
@@ -209,11 +210,16 @@ form > div {
   .site-header .history-top-nav > a,
   .site-header .history-top-nav > button {
     flex: 1 1 0;
-    font-size: clamp(.58rem, 2.5vw, .82rem);
+    font-size: clamp(.62rem, 2.6vw, .82rem);
     min-width: 0;
     overflow-wrap: normal;
     padding: 8px 6px;
     white-space: nowrap;
+  }
+
+  .site-header .dashboard-top-nav > a,
+  .site-header .history-top-nav > a {
+    font-size: clamp(.62rem, 2.6vw, .82rem);
   }
 
   main {
