@@ -20,28 +20,29 @@
     </style>
   </head>
   <body class="auth-checking">
-    <div class="container-header">
-      <div class="logo">
-        <a href="dashboard.html"
-          ><img src="../media/MoneyTour.png" alt="MoneyTour Logo"
-        /></a>
-      </div>
-      <div class="transbalance">
-        <p>Balance</p>
-        <span id="balance">₦0.00</span>
-      </div>
-      <div class="top-nav">
-        <button type="button" onclick="window.location.href = 'dashboard.html'">
+    <header class="site-header">
+      <div class="nav-wrap">
+        <a class="brand" href="../index.html" aria-label="MoneyTour home">
+          <img src="../media/MoneyTour.png" alt="" />
+          <span>Money<span>Tour</span></span>
+        </a>
+        <nav class="top-nav history-top-nav" aria-label="Transaction history navigation">
+          <a class="nav-login" href="dashboard.html">
           Add Transaction
-        </button>
-        <button type="button" onclick="window.moneytourLogout()">
-          Logout
-        </button>
+          </a>
+          <button class="button button-small" type="button" onclick="window.moneytourLogout()">
+            Logout
+          </button>
+        </nav>
       </div>
-    </div>
+    </header>
 
     <main>
       <div class="container-transaction">
+        <div class="transbalance">
+          <p>Balance</p>
+          <span id="balance">₦0.00</span>
+        </div>
         <h3 class="t-hist">Transaction History</h3>
         <table id="transactionTable">
           <thead>
