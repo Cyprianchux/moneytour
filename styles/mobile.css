@@ -171,6 +171,51 @@ form > div {
     margin: 0;
   }
 
+  .site-header .nav-wrap {
+    flex-wrap: nowrap;
+    gap: 6px;
+    min-width: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .site-header .nav-wrap .brand {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .site-header .nav-wrap .brand img {
+    flex: 0 0 32px;
+    height: 32px;
+    width: 32px;
+  }
+
+  .site-header .nav-wrap .brand > span {
+    font-size: clamp(.85rem, 4vw, 1.05rem);
+    white-space: nowrap;
+  }
+
+  .site-header .dashboard-top-nav,
+  .site-header .history-top-nav {
+    flex: 0 1 auto;
+    flex-wrap: nowrap;
+    gap: clamp(4px, 1vw, 8px);
+    min-width: 0;
+    width: auto;
+  }
+
+  .site-header .dashboard-top-nav > a,
+  .site-header .dashboard-top-nav > button,
+  .site-header .history-top-nav > a,
+  .site-header .history-top-nav > button {
+    flex: 1 1 0;
+    font-size: clamp(.58rem, 2.5vw, .82rem);
+    min-width: 0;
+    overflow-wrap: normal;
+    padding: 8px 6px;
+    white-space: nowrap;
+  }
+
   main {
     padding-left: 16px;
     padding-right: 16px;
