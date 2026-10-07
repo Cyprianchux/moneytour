@@ -326,6 +326,10 @@ main > section h3 {
   font-size: .68rem;
 }
 
+.activity-heading .activity-view-all {
+  font-weight: 700;
+}
+
 .activity-item {
   align-items: center;
   display: flex;
