@@ -141,10 +141,13 @@ test("dashboard header uses the homepage nav layout and form section width", asy
   expect(await page.locator(".form-section").evaluate((section) => getComputedStyle(section).maxWidth)).toBe("800px");
 
   await page.setViewportSize({ width: 390, height: 800 });
-  const navWidth = await nav.locator(".top-nav").evaluate((element) => element.getBoundingClientRect().width);
+  const dashboardNav = nav.locator(".top-nav");
+  const navWidth = await dashboardNav.evaluate((element) => element.getBoundingClientRect().width);
   const logoutWidth = await logout.evaluate((element) => element.getBoundingClientRect().width);
+  await expect(logout).toHaveCSS("flex-grow", "0");
+  await expect(logout).toHaveCSS("font-size", "14.72px");
+  expect(Math.abs(navWidth - logoutWidth)).toBeLessThanOrEqual(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
-  expect(navWidth).toBeGreaterThanOrEqual(logoutWidth);
 
   for (const width of [320, 360, 390, 640]) {
     await page.setViewportSize({ width, height: 800 });
@@ -153,6 +156,7 @@ test("dashboard header uses the homepage nav layout and form section width", asy
     expect(Math.abs(brandBox.y + brandBox.height / 2 - navBox.y - navBox.height / 2)).toBeLessThanOrEqual(1);
     expect(navBox.x).toBeGreaterThanOrEqual(brandBox.x + brandBox.width);
     expect(navBox.x + navBox.width).toBeLessThanOrEqual(width - 12);
+    expect(await nav.locator(".top-nav").evaluate((element) => getComputedStyle(element).flexGrow)).toBe("0");
     const buttonBoxes = await nav.locator(".top-nav > *").evaluateAll((elements) =>
       elements.map((element) => {
         const { x, width } = element.getBoundingClientRect();
@@ -186,6 +190,9 @@ test("transaction history uses the homepage header and shows balance above the h
   await expect(addTransaction).toHaveClass(/button/);
   await expect(logout).toHaveClass(/button-small/);
   await expect(balance).toHaveCount(1);
+  await expect(balance.locator("span")).toHaveCSS("font-size", "24px");
+  await expect(addTransaction).toHaveCSS("background-color", "rgb(83, 4, 80)");
+  await expect(addTransaction).toHaveCSS("color", "rgb(255, 255, 255)");
   await expect(addTransaction.locator("xpath=following-sibling::div[@class='transbalance']")).toHaveCount(1);
   await expect(historyCard.locator(".t-hist")).toHaveCount(1);
 
@@ -194,6 +201,12 @@ test("transaction history uses the homepage header and shows balance above the h
   const navBox = await nav.locator(".top-nav").boundingBox();
   expect(Math.abs(brandBox.y + brandBox.height / 2 - navBox.y - navBox.height / 2)).toBeLessThanOrEqual(1);
   expect(navBox.x + navBox.width).toBeLessThanOrEqual(378);
+  await expect(logout).toHaveCSS("flex-grow", "0");
+  expect(await nav.locator(".top-nav").evaluate((element) => {
+    const navRect = element.getBoundingClientRect();
+    const buttonRect = element.querySelector("button").getBoundingClientRect();
+    return Math.abs(navRect.width - buttonRect.width);
+  })).toBeLessThanOrEqual(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await expect(balance.locator("p")).toHaveText("Balance:");
   await expect(balance).toHaveCSS("display", "flex");
