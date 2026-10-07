@@ -130,21 +130,21 @@ test("dashboard header uses the homepage nav layout and form section width", asy
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/dashboard.html");
   const nav = page.locator(".site-header .nav-wrap");
-  const viewTransactions = page.getByRole("link", { name: "View Transactions" });
+  const viewAll = page.getByRole("link", { name: "View all" });
   const logout = page.getByRole("button", { name: "Logout" });
 
   await expect(nav).toHaveClass(/nav-wrap/);
   await expect(nav.locator(".top-nav")).toHaveClass(/top-nav/);
-  await expect(viewTransactions).toHaveClass(/nav-login/);
+  await expect(page.getByRole("link", { name: "View Transactions" })).toHaveCount(0);
+  await expect(viewAll).toHaveCSS("font-weight", "700");
   await expect(logout).toHaveClass(/button-small/);
   expect(await page.locator(".form-section").evaluate((section) => getComputedStyle(section).maxWidth)).toBe("800px");
 
   await page.setViewportSize({ width: 390, height: 800 });
   const navWidth = await nav.locator(".top-nav").evaluate((element) => element.getBoundingClientRect().width);
-  const viewWidth = await viewTransactions.evaluate((element) => element.getBoundingClientRect().width);
   const logoutWidth = await logout.evaluate((element) => element.getBoundingClientRect().width);
-  expect(Math.abs(viewWidth - logoutWidth)).toBeLessThanOrEqual(3);
-  expect(navWidth).toBeGreaterThan(viewWidth);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  expect(navWidth).toBeGreaterThanOrEqual(logoutWidth);
 
   for (const width of [320, 360, 390, 640]) {
     await page.setViewportSize({ width, height: 800 });
@@ -159,7 +159,8 @@ test("dashboard header uses the homepage nav layout and form section width", asy
         return { x, width };
       }),
     );
-    expect(buttonBoxes[0].x + buttonBoxes[0].width).toBeLessThanOrEqual(buttonBoxes[1].x);
+    expect(buttonBoxes).toHaveLength(1);
+    expect(buttonBoxes[0].x + buttonBoxes[0].width).toBeLessThanOrEqual(width - 12);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   }
 });
@@ -180,22 +181,20 @@ test("transaction history uses the homepage header and shows balance above the h
   await expect(nav).toHaveClass(/nav-wrap/);
   await expect(nav.locator(".brand")).toContainText("MoneyTour");
   await expect(nav.locator(".top-nav")).toHaveClass(/top-nav/);
-  await expect(addTransaction).toHaveClass(/nav-login/);
+  await expect(nav.getByRole("link", { name: "Add Transaction" })).toHaveCount(0);
+  await expect(addTransaction).toHaveClass(/history-add-transaction/);
+  await expect(addTransaction).toHaveClass(/button/);
   await expect(logout).toHaveClass(/button-small/);
   await expect(balance).toHaveCount(1);
-  await expect(historyCard.locator(".transbalance + .t-hist")).toHaveCount(1);
+  await expect(addTransaction.locator("xpath=following-sibling::div[@class='transbalance']")).toHaveCount(1);
+  await expect(historyCard.locator(".t-hist")).toHaveCount(1);
 
   await page.setViewportSize({ width: 390, height: 800 });
-  const addWidth = await addTransaction.evaluate((element) => element.getBoundingClientRect().width);
-  const logoutWidth = await logout.evaluate((element) => element.getBoundingClientRect().width);
-  expect(Math.abs(addWidth - logoutWidth)).toBeLessThanOrEqual(3);
   const brandBox = await nav.locator(".brand").boundingBox();
   const navBox = await nav.locator(".top-nav").boundingBox();
   expect(Math.abs(brandBox.y + brandBox.height / 2 - navBox.y - navBox.height / 2)).toBeLessThanOrEqual(1);
   expect(navBox.x + navBox.width).toBeLessThanOrEqual(378);
-  const addBox = await addTransaction.boundingBox();
-  const logoutBox = await logout.boundingBox();
-  expect(addBox.x + addBox.width).toBeLessThanOrEqual(logoutBox.x);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await expect(balance.locator("p")).toHaveText("Balance:");
   await expect(balance).toHaveCSS("display", "flex");
   await expect(balance).toHaveCSS("flex-direction", "row");
