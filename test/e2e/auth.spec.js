@@ -105,16 +105,21 @@ test("how-it-works content toggles on mobile and remains visible on desktop", as
   const howtoContent = page.locator("#howtoContent");
   await expect(howtoToggle).toHaveAttribute("aria-expanded", "false");
   await expect(howtoContent).toBeHidden();
+  const howtoArrow = page.locator(".howto-arrow");
+  await expect(howtoArrow).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, 0)");
   await howtoToggle.click();
   await expect(howtoToggle).toHaveAttribute("aria-expanded", "true");
   await expect(howtoContent).toBeVisible();
+  await expect(howtoArrow).toHaveCSS("transform", "matrix(0, 1, -1, 0, 0, 0)");
   await howtoToggle.click();
   await expect(howtoToggle).toHaveAttribute("aria-expanded", "false");
   await expect(howtoContent).toBeHidden();
+  await expect(howtoArrow).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, 0)");
 
   await page.setViewportSize({ width: 1280, height: 800 });
   await expect(howtoContent).toBeVisible();
   await expect(howtoToggle).toHaveAttribute("aria-expanded", "true");
+  await expect(howtoArrow).toHaveCSS("transform", "matrix(0, 1, -1, 0, 0, 0)");
 });
 
 test("dashboard header uses the homepage nav layout and form section width", async ({ page }) => {
@@ -141,12 +146,20 @@ test("dashboard header uses the homepage nav layout and form section width", asy
   expect(Math.abs(viewWidth - logoutWidth)).toBeLessThanOrEqual(3);
   expect(navWidth).toBeGreaterThan(viewWidth);
 
-  for (const width of [320, 390, 640]) {
+  for (const width of [320, 360, 390, 640]) {
     await page.setViewportSize({ width, height: 800 });
     const brandBox = await nav.locator(".brand").boundingBox();
     const navBox = await nav.locator(".top-nav").boundingBox();
     expect(Math.abs(brandBox.y + brandBox.height / 2 - navBox.y - navBox.height / 2)).toBeLessThanOrEqual(1);
     expect(navBox.x).toBeGreaterThanOrEqual(brandBox.x + brandBox.width);
+    expect(navBox.x + navBox.width).toBeLessThanOrEqual(width - 12);
+    const buttonBoxes = await nav.locator(".top-nav > *").evaluateAll((elements) =>
+      elements.map((element) => {
+        const { x, width } = element.getBoundingClientRect();
+        return { x, width };
+      }),
+    );
+    expect(buttonBoxes[0].x + buttonBoxes[0].width).toBeLessThanOrEqual(buttonBoxes[1].x);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   }
 });
@@ -179,6 +192,15 @@ test("transaction history uses the homepage header and shows balance above the h
   const brandBox = await nav.locator(".brand").boundingBox();
   const navBox = await nav.locator(".top-nav").boundingBox();
   expect(Math.abs(brandBox.y + brandBox.height / 2 - navBox.y - navBox.height / 2)).toBeLessThanOrEqual(1);
+  expect(navBox.x + navBox.width).toBeLessThanOrEqual(378);
+  const addBox = await addTransaction.boundingBox();
+  const logoutBox = await logout.boundingBox();
+  expect(addBox.x + addBox.width).toBeLessThanOrEqual(logoutBox.x);
+  await expect(balance.locator("p")).toHaveText("Balance:");
+  await expect(balance).toHaveCSS("display", "flex");
+  await expect(balance).toHaveCSS("flex-direction", "row");
+  await expect(balance).toHaveCSS("flex-wrap", "nowrap");
+  await expect(balance.locator("p")).toHaveCSS("white-space", "nowrap");
 });
 
 test("dashboard toggle selects income first, switches to expenses, and submits the selected type", async ({ page }) => {
