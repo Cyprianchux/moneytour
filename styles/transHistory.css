@@ -39,6 +39,11 @@ body {
   white-space: nowrap;
 }
 
+.history-add-transaction {
+  align-self: flex-start;
+  margin-bottom: 16px;
+}
+
 .transbalance p {
   font-size: .85rem;
   text-transform: uppercase;
