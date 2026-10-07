@@ -5,20 +5,38 @@ document.addEventListener('DOMContentLoaded', async () => {
   // console.log("Logged in userId: ", userId);
   const myUsername = session.username;
   const usernameSpan = document.getElementById("username");
-/*
-  if (userId === null) {
-    alert("Please login first!");
-    window.location.href = "login.html";
-    return;
-  }
-*/
   let formattedUsername = '';
   if (myUsername) {
     formattedUsername = myUsername.charAt(0).toUpperCase() + myUsername.slice(1).toLowerCase();
     document.getElementById("username").textContent = formattedUsername;
     document.getElementById("profileMark").textContent = formattedUsername.slice(0, 2).toUpperCase();
-    document.getElementById("greeting").textContent = `Good morning, ${formattedUsername}`;
+    const updateGreeting = () => {
+      document.getElementById("greeting").textContent =
+        `Good ${window.moneytourTimeOfDay()}, ${formattedUsername}`;
+    };
+    updateGreeting();
+    window.setInterval(updateGreeting, 60_000);
   }
+
+  const howtoButton = document.getElementById("howtoToggle");
+  const howtoCard = document.querySelector(".howto-card");
+  const howtoMedia = window.matchMedia("(max-width: 900px)");
+  const updateHowtoDisclosure = () => {
+    if (howtoMedia.matches) {
+      howtoCard.classList.remove("is-open");
+      howtoButton.setAttribute("aria-expanded", "false");
+    } else {
+      howtoCard.classList.remove("is-open");
+      howtoButton.setAttribute("aria-expanded", "true");
+    }
+  };
+  updateHowtoDisclosure();
+  howtoMedia.addEventListener("change", updateHowtoDisclosure);
+  howtoButton.addEventListener("click", () => {
+    if (!howtoMedia.matches) return;
+    const isOpen = howtoCard.classList.toggle("is-open");
+    howtoButton.setAttribute("aria-expanded", String(isOpen));
+  });
 
   const transactionForm = document.getElementById('transactionForm');
   const transactionList = document.getElementById('transactionList');

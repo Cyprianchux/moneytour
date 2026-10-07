@@ -12,6 +12,12 @@ window.moneytourFormatAmount = (amount) =>
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(Number(amount));
+window.moneytourTimeOfDay = (date = new Date()) => {
+  const minutes = date.getHours() * 60 + date.getMinutes();
+  if (minutes < 12 * 60) return "morning";
+  if (minutes < 17 * 60 + 30) return "afternoon";
+  return "evening";
+};
 window.moneytourAuthHeaders = () => {
   const token = sessionStorage.getItem("moneytourToken");
   return token ? { Authorization: `Bearer ${token}` } : {};
